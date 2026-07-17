@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAB Business — Services IA (Wireframe)</title>
+<style>
+  :root{
+    --paper:#ffffff;--bg:#eeeeee;--screen:#f4f4f4;--line:#d4d4d4;--line-2:#b3b3b3;--line-strong:#8a8a8a;
+    --ink:#2b2b2b;--ink-2:#6f6f6f;--ink-3:#9a9a9a;--fill:#e7e7e7;--fill-2:#dcdcdc;--frame:#1b1b1b;
+    --pill-solid:#2b2b2b;--radius:14px;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);font-family:var(--sans);color:var(--ink);display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:28px 12px;-webkit-font-smoothing:antialiased;}
+  .stage{width:100%;max-width:400px;}
+  .caption{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-align:center;margin:0 0 14px;letter-spacing:.02em;}
+
+  .phone{position:relative;width:100%;aspect-ratio:390/844;background:var(--screen);border:10px solid var(--frame);border-radius:44px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.18);}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:130px;height:26px;background:var(--frame);border-radius:0 0 16px 16px;z-index:60;}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:44px;z-index:40;display:flex;align-items:flex-start;justify-content:space-between;padding:14px 24px 0;font-size:13px;font-weight:600;color:var(--ink);font-family:var(--mono);pointer-events:none;}
+
+  .screen{position:absolute;inset:0;padding-top:44px;display:none;flex-direction:column;}
+  .screen.active{display:flex;}
+  .topbar{display:flex;align-items:center;gap:12px;padding:6px 18px 12px;flex:0 0 auto;}
+  .topbar .back{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink);cursor:pointer;flex:0 0 auto;}
+  .topbar h1{font-size:17px;margin:0;font-weight:650;}
+  .topbar .sub{font-size:12px;color:var(--ink-2);margin:1px 0 0;}
+  .scroll{flex:1 1 auto;overflow-y:auto;padding:2px 18px 130px;}
+  .scroll::-webkit-scrollbar{width:0;}
+
+  .sec{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:20px 2px 9px;display:flex;justify-content:space-between;align-items:center;}
+  .sec:first-child{margin-top:8px;}
+  .sec .linkbtn{text-transform:none;}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+  .field-label{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px;}
+  .field-value{font-size:15px;font-weight:600;}
+  .row-between{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .linkbtn{background:none;border:none;font-family:var(--mono);font-size:11px;color:var(--ink-2);text-decoration:underline;cursor:pointer;padding:0;letter-spacing:.03em;}
+  .mini{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:3px;}
+  .pending{font-family:var(--mono);font-size:10px;color:var(--ink);margin-top:6px;}
+  .pending::before{content:"● ";}
+
+  /* LANDING */
+  .lead{padding:8px 18px 2px;}
+  .lead .arr{font-size:19px;text-align:center;color:var(--ink-2);}
+  .lead h1{font-size:26px;text-align:center;margin:4px 0 5px;font-weight:680;}
+  .lead p{text-align:center;font-size:12.5px;color:var(--ink-2);margin:0 auto;max-width:250px;line-height:1.5;}
+  .favs{display:flex;gap:12px;padding:8px 4px 2px;}
+  .fav{flex:1;text-align:center;}
+  .fav .c{width:52px;height:52px;margin:0 auto 6px;border-radius:50%;background:var(--fill);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--ink-2);}
+  .fav .l{font-family:var(--mono);font-size:10px;color:var(--ink-2);}
+  .hero-card{background:var(--paper);border:1.5px solid var(--line-strong);border-radius:16px;padding:16px;cursor:pointer;display:flex;gap:13px;align-items:flex-start;}
+  .hero-card:hover,.hero-card:focus-visible{background:var(--fill);outline:none;}
+  .hero-card .hico{width:44px;height:44px;border-radius:11px;background:var(--fill);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--ink);flex:0 0 auto;}
+  .hero-card .ht{font-weight:650;font-size:16px;}
+  .hero-card .hd{font-size:12px;color:var(--ink-2);margin-top:3px;line-height:1.5;}
+  .hero-card .chev{margin-left:auto;color:var(--ink-3);font-size:16px;align-self:center;}
+  .svc-card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:14px;display:flex;gap:12px;align-items:center;margin-bottom:9px;cursor:pointer;}
+  .svc-card:hover{border-color:var(--line-strong);}
+  .svc-card .sico{width:36px;height:36px;border-radius:9px;background:var(--fill);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-2);flex:0 0 auto;}
+  .svc-card .st2{font-weight:600;font-size:13.5px;}
+  .svc-card .sd{font-size:11px;color:var(--ink-2);margin-top:1px;}
+  .svc-card .chev{margin-left:auto;color:var(--ink-3);}
+  .req-strip{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:6px 13px;}
+  .rs-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line);}
+  .rs-row:first-child{border-top:none;}
+  .rs-row .rn{font-size:13px;}
+  .rs-row .rn small{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:1px;}
+
+  /* CATALOGUE */
+  .search{width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:24px;background:var(--paper);font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-bottom:6px;}
+  .cat-row{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:15px 14px;display:flex;align-items:center;gap:10px;margin-bottom:9px;cursor:pointer;}
+  .cat-row:hover{border-color:var(--line-strong);}
+  .cat-row .cn{font-size:14px;font-weight:550;}
+  .cat-row .chev{margin-left:auto;color:var(--ink-3);}
+
+  .doc-thumb{width:38px;height:46px;border:1px dashed var(--line-2);border-radius:5px;background:repeating-linear-gradient(135deg,transparent 0 6px,var(--fill) 6px 7px),var(--paper);flex:0 0 auto;}
+
+  .company-switch{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left;margin-bottom:10px;}
+  .company-switch:hover,.company-switch:focus-visible{background:var(--fill);outline:none;}
+  .company-switch .cs-chev{font-size:15px;color:var(--ink-2);}
+
+  .node-company{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line-2);border-radius:12px;padding:11px 13px;}
+  .node-company .glyph{width:34px;height:34px;border-radius:9px;background:var(--fill);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink-2);flex:0 0 auto;}
+  .node-company .n{font-weight:650;font-size:14px;}
+  .node-company .m{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:1px;}
+  .rail{padding-left:19px;border-left:1.5px solid var(--line-2);margin:0 0 0 16px;}
+  .member{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;cursor:pointer;transition:border-color .15s,background .15s;}
+  .member::before{content:"";position:absolute;left:-19px;top:24px;width:17px;height:1.5px;background:var(--line-2);}
+  .member:hover,.member:focus-visible{border-color:var(--line-strong);outline:none;}
+  .member .mtop{display:flex;align-items:center;gap:11px;}
+  .avatar{width:38px;height:38px;border-radius:50%;background:var(--fill);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink-2);flex:0 0 auto;}
+  .member .name{font-weight:640;font-size:14.5px;line-height:1.15;}
+  .member .meta{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:2px;}
+  .member .chev{margin-left:auto;color:var(--ink-3);font-size:15px;}
+  .member.isnew{border-style:dashed;border-color:var(--line-strong);}
+
+  .pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;}
+  .pill{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:20px;border:1px solid var(--line-2);color:var(--ink-2);background:var(--paper);white-space:nowrap;line-height:1;}
+  .pill.solid{background:var(--pill-solid);color:#fff;border-color:var(--pill-solid);}
+  .pill.dash{border-style:dashed;}
+  .pill.role{background:var(--fill);border-color:var(--fill-2);color:var(--ink);}
+
+  .add-btn{width:100%;margin-top:12px;padding:12px;border:1.5px dashed var(--line-2);background:transparent;border-radius:12px;font-family:var(--mono);font-size:12px;color:var(--ink-2);cursor:pointer;letter-spacing:.03em;}
+  .add-btn:hover{border-color:var(--line-strong);color:var(--ink);}
+
+  .meter-wrap{margin-top:14px;padding:12px 13px;background:var(--paper);border:1px solid var(--line);border-radius:12px;}
+  .meter-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--ink-2);margin-bottom:8px;}
+  .meter-top b{color:var(--ink);}
+  .meter{height:8px;border-radius:6px;background:var(--fill);overflow:hidden;border:1px solid var(--line);}
+  .meter-fill{height:100%;background:var(--line-strong);width:0;transition:width .25s;}
+  .meter-note{font-family:var(--mono);font-size:10px;margin-top:7px;color:var(--ink-3);}
+  .meter-note.warn{color:var(--ink);}
+  .meter-note.warn::before{content:"! ";font-weight:700;}
+
+  .stepper{display:flex;align-items:center;gap:14px;justify-content:center;margin:6px 0 4px;}
+  .stepper button{width:44px;height:44px;border-radius:11px;border:1px solid var(--line-2);background:var(--paper);font-size:22px;cursor:pointer;color:var(--ink);}
+  .stepper .val{font-size:30px;font-weight:650;min-width:88px;text-align:center;}
+  .stepper .val small{font-size:16px;color:var(--ink-2);}
+
+  .stickybar{position:absolute;left:0;right:0;bottom:0;z-index:50;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--screen) 72%,rgba(244,244,244,0));}
+  .review-cta{width:100%;padding:15px;border:none;border-radius:14px;background:var(--pill-solid);color:#fff;font-size:14px;font-weight:600;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:9px;}
+  .review-cta[disabled]{background:var(--fill-2);color:var(--ink-3);cursor:not-allowed;}
+  .review-cta .count{font-family:var(--mono);font-size:11px;background:rgba(255,255,255,.22);padding:2px 8px;border-radius:12px;}
+  .review-cta[disabled] .count{background:rgba(0,0,0,.06);}
+  .review-cta.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line-2);}
+  .dual{display:flex;gap:10px;}
+  .dual .review-cta{flex:1;padding:14px 8px;}
+
+  .sheet-scrim{position:absolute;inset:0;z-index:70;background:rgba(20,20,20,.32);opacity:0;pointer-events:none;transition:opacity .2s;}
+  .sheet-scrim.open{opacity:1;pointer-events:auto;}
+  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:var(--paper);border-radius:20px 20px 0 0;border-top:1px solid var(--line);transform:translateY(102%);transition:transform .24s cubic-bezier(.2,.7,.2,1);max-height:92%;overflow-y:auto;padding:8px 18px 24px;}
+  .sheet.open{transform:translateY(0);}
+  .grab{width:38px;height:4px;border-radius:3px;background:var(--line-2);margin:8px auto 14px;}
+  .sheet h2{font-size:16px;margin:0 0 2px;}
+  .sheet .subh{font-family:var(--mono);font-size:11px;color:var(--ink-2);margin:0 0 16px;}
+  .sheet-error{display:none;background:var(--fill);border:1px dashed var(--line-strong);border-radius:10px;padding:11px 12px;font-family:var(--mono);font-size:11px;color:var(--ink);line-height:1.5;margin-bottom:14px;}
+  .sheet-error.show{display:block;}
+  .sheet-error b{font-weight:700;}
+  .act{width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 13px;margin-bottom:9px;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--ink);}
+  .act:hover{border-color:var(--line-strong);}
+  .act.active-co{border-color:var(--line-strong);background:var(--fill);}
+  .act .ico{width:30px;height:30px;border-radius:8px;background:var(--fill);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 auto;color:var(--ink-2);}
+  .act .txt small{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px;}
+  .act.danger .txt{color:var(--ink);}
+  .act .chev{margin-left:auto;color:var(--ink-3);}
+
+  .seg{display:flex;gap:8px;margin-bottom:14px;}
+  .seg button{flex:1;padding:11px;border:1px solid var(--line-2);background:var(--paper);border-radius:10px;font-family:var(--mono);font-size:11px;color:var(--ink-2);cursor:pointer;}
+  .seg button.on{background:var(--pill-solid);color:#fff;border-color:var(--pill-solid);}
+
+  .inp{width:100%;padding:12px 13px;border:1px solid var(--line-2);border-radius:11px;font-size:15px;font-family:var(--sans);color:var(--ink);background:var(--paper);margin-bottom:12px;}
+  .inp:focus-visible{outline:2px solid var(--line-strong);outline-offset:1px;}
+  .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line);}
+  .toggle-row:first-of-type{border-top:none;}
+  .toggle-row .lbl{font-size:14px;}
+  .toggle-row .lbl small{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px;}
+  .switch{width:46px;height:27px;border-radius:16px;background:var(--fill-2);border:1px solid var(--line-2);position:relative;cursor:pointer;flex:0 0 auto;transition:background .15s;}
+  .switch .knob{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:var(--paper);border:1px solid var(--line-2);transition:left .15s;}
+  .switch.on{background:var(--line-strong);}
+  .switch.on .knob{left:21px;}
+  .upload-box{border:1.5px dashed var(--line-2);border-radius:12px;padding:16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-2);cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:9px;}
+  .upload-box .idthumb{width:34px;height:22px;border-radius:3px;border:1px dashed var(--line-2);background:repeating-linear-gradient(135deg,transparent 0 4px,var(--fill) 4px 5px);flex:0 0 auto;}
+  .upload-box.done{border-style:solid;background:var(--fill);color:var(--ink);}
+  .upload-box.done .idthumb{border-style:solid;background:var(--paper);}
+  .sheet-primary{width:100%;padding:14px;border:none;border-radius:12px;background:var(--pill-solid);color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;}
+  .sheet-primary[disabled]{background:var(--fill-2);color:var(--ink-3);}
+  .sheet-ghost{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-size:13px;color:var(--ink-2);cursor:pointer;margin-top:8px;}
+
+  .change-item{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:10px;}
+  .change-item .ci-title{font-weight:640;font-size:14px;}
+  .change-item .ci-detail{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:3px;line-height:1.5;}
+  .maps{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+  .maps .mh{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px;}
+  .req{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink);margin-bottom:6px;}
+  .req .dot{width:5px;height:5px;border-radius:50%;background:var(--line-strong);flex:0 0 auto;}
+  .req .sla{margin-left:auto;}
+  .warnrow{display:flex;gap:8px;align-items:flex-start;margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--ink);background:var(--fill);border:1px solid var(--line);border-radius:9px;padding:9px 10px;line-height:1.5;}
+  .warnrow b{font-weight:700;}
+  .blocker{border-style:dashed;border-color:var(--line-strong);}
+  .summary-line{display:flex;justify-content:space-between;font-size:13px;padding:7px 2px;color:var(--ink-2);}
+  .summary-line b{color:var(--ink);font-weight:640;}
+
+  .bundle{background:var(--paper);border:1px solid var(--line-2);border-radius:14px;padding:15px;margin-bottom:12px;}
+  .bundle .bh{display:flex;justify-content:space-between;align-items:flex-start;}
+  .bundle .bh .t{font-weight:650;font-size:15px;}
+  .bundle .bh .r{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px;}
+  .prog{height:7px;border-radius:5px;background:var(--fill);border:1px solid var(--line);overflow:hidden;margin:12px 0 6px;}
+  .prog-fill{height:100%;background:var(--line-strong);}
+  .prog-note{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);}
+  .child{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line);}
+  .child:first-of-type{border-top:1px dashed var(--line);margin-top:6px;}
+  .child .cname{font-size:13px;}
+  .child .cname small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-top:1px;}
+  .child .cstat{margin-left:auto;}
+  .stat{font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:20px;border:1px solid var(--line-2);color:var(--ink-2);white-space:nowrap;}
+  .stat.done{background:var(--pill-solid);color:#fff;border-color:var(--pill-solid);}
+  .stat.review{background:var(--paper);}
+  .stat.action{background:var(--fill);border-style:dashed;border-color:var(--line-strong);color:var(--ink);}
+
+  .toast{position:absolute;bottom:96px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--pill-solid);color:#fff;font-family:var(--mono);font-size:11px;padding:9px 14px;border-radius:22px;z-index:80;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;max-width:80%;text-align:center;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .done-hero{text-align:center;padding:26px 0 10px;}
+  .done-hero .ring{width:64px;height:64px;border-radius:50%;border:2px solid var(--line-strong);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;color:var(--ink);}
+  .done-hero h2{margin:0 0 5px;font-size:19px;}
+  .done-hero p{margin:0;font-family:var(--mono);font-size:11px;color:var(--ink-2);line-height:1.6;}
+
+  .reset-btn{display:block;margin:8px auto 0;background:none;border:1px solid var(--line-2);border-radius:20px;padding:7px 16px;font-family:var(--mono);font-size:11px;color:var(--ink-2);cursor:pointer;}
+  .reset-btn:hover{border-color:var(--line-strong);color:var(--ink);}
+
+  .botnav{position:absolute;left:0;right:0;bottom:0;z-index:45;display:flex;align-items:center;justify-content:space-between;gap:2px;background:var(--paper);border-top:1px solid var(--line);padding:8px 12px calc(12px + env(safe-area-inset-bottom));}
+  .bn-item{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink-3);font-family:var(--sans);font-size:11px;cursor:pointer;padding:6px 0;border-radius:12px;}
+  .bn-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+  .bn-item.active{color:var(--ink);font-weight:650;background:var(--fill);}
+  .bn-item.active svg{fill:var(--ink);stroke:none;}
+  .bn-center{flex:0 0 auto;width:54px;height:54px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper);display:flex;align-items:center;justify-content:center;margin:0 4px;cursor:pointer;}
+
+  .credit{position:fixed;top:14px;right:16px;z-index:100;display:flex;align-items:center;gap:7px;opacity:.4;user-select:none;}
+  .credit .by{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);}
+  .credit img{height:14px;width:auto;display:block;}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <p class="caption">FAB Business · Services IA · greyscale wireframe</p>
+  <div class="phone" id="phone">
+    <div class="notch"></div>
+    <div class="statusbar"><span>9:41</span><span>◱ ◲ ▮</span></div>
+
+    <!-- ============ LANDING ============ -->
+    <section class="screen active" data-screen="landing">
+      <div class="lead">
+        <div class="arr">↗</div>
+        <h1>Services</h1>
+        <p>Access all banking services and manage your account settings.</p>
+      </div>
+      <div class="scroll" style="padding-top:14px;">
+        <div class="sec">Favourites</div>
+        <div class="favs">
+          <div class="fav"><div class="c">BC</div><div class="l">Balance</div></div>
+          <div class="fav"><div class="c">TL</div><div class="l">Trade</div></div>
+          <div class="fav"><div class="c">UA</div><div class="l">Update</div></div>
+          <div class="fav"><div class="c">IB</div><div class="l">IBAN</div></div>
+        </div>
+
+        <div class="sec">Manage your business</div>
+        <div class="hero-card" tabindex="0" onclick="enterWorkspace()" onkeydown="if(event.key==='Enter')enterWorkspace()">
+          <div class="hico">⚏</div>
+          <div>
+            <div class="ht">Manage structure</div>
+            <div class="hd">Signatories, key contacts, power of attorney, ID documents, ownership, trade licence and contact details — edited on the structure, reviewed together.</div>
+          </div>
+          <div class="chev">›</div>
+        </div>
+
+        <div class="sec">Other services</div>
+        <div class="svc-card" onclick="openCatalogue('biz')">
+          <div class="sico">⌂</div><div><div class="st2">Business services</div><div class="sd">Account conversion, cheque book, name change, FATCA</div></div><div class="chev">›</div>
+        </div>
+        <div class="svc-card" onclick="openCatalogue('letters')">
+          <div class="sico">▤</div><div><div class="st2">Letters &amp; certificates</div><div class="sd">Balance, IBAN, liability, reference and more</div></div><div class="chev">›</div>
+        </div>
+
+        <div class="sec">Requests <span class="linkbtn">See all</span></div>
+        <div class="req-strip" id="landingRequests"></div>
+      </div>
+      <nav class="botnav">
+        <button class="bn-item" onclick="toast('Home — out of scope in this prototype')"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
+        <button class="bn-item" onclick="toast('Transfer — out of scope in this prototype')"><svg viewBox="0 0 24 24"><path d="M5 9h12M14 6l3 3-3 3M19 15H7M10 12l-3 3 3 3"/></svg><span>Transfer</span></button>
+        <button class="bn-center" onclick="toast('FAB')"><svg viewBox="0 0 24 24" style="width:26px;height:26px;stroke:var(--ink);fill:none;stroke-width:1.4;stroke-linecap:round;"><path d="M13.5 5c-.5 4-1.5 8-3.5 13M10.5 18c3-1.5 5.5-4.5 5.5-8.5"/></svg></button>
+        <button class="bn-item" onclick="toast('Pay — out of scope in this prototype')"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M3 10h18"/></svg><span>Pay</span></button>
+        <button class="bn-item active"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/><path d="M17 3.3l3.4 3.4-3.4 3.4-3.4-3.4z"/></svg><span>Service</span></button>
+      </nav>
+    </section>
+
+    <!-- ============ CATALOGUE ============ -->
+    <section class="screen" data-screen="catalogue">
+      <div class="topbar">
+        <div class="back" title="Back" onclick="goLanding()">‹</div>
+        <div><h1 id="catTitle">Business services</h1><div class="sub" id="catSub">—</div></div>
+      </div>
+      <div class="scroll">
+        <div class="search">🔍 Search services</div>
+        <div id="catList"></div>
+      </div>
+    </section>
+
+    <!-- ============ WORKSPACE ============ -->
+    <section class="screen" data-screen="workspace">
+      <div class="topbar">
+        <div class="back" title="Back" onclick="goLanding()">‹</div>
+        <div><h1>Manage structure</h1><div class="sub">Edit, then review together</div></div>
+      </div>
+      <div class="scroll">
+        <div class="sec">Company</div>
+        <button class="company-switch" onclick="openCompanySwitch()">
+          <div><div class="field-label">Registered company</div><div class="field-value" id="wsCompanyName">Yalla LLC</div></div>
+          <div class="cs-chev">▾</div>
+        </button>
+        <div class="card" id="licenceCard">
+          <div class="row-between">
+            <div style="display:flex;gap:12px;align-items:center;">
+              <div class="doc-thumb"></div>
+              <div><div class="field-label">Trade licence</div>
+                <div class="field-value" style="font-size:14px;" id="licenceNo">DED · CN-1938472</div>
+                <div class="mini" id="licenceMeta">Expires 14 Mar 2026</div></div>
+            </div>
+            <button class="linkbtn" id="licenceBtn" onclick="toggleLicence()">Update</button>
+          </div>
+        </div>
+        <div class="card" id="bizContactCard">
+          <div class="row-between">
+            <div><div class="field-label">Business contact</div>
+              <div class="field-value" style="font-size:14px;" id="bizEmail">finance@yalla.ae</div>
+              <div class="mini" id="bizPhone">+971 4 555 0100</div>
+              <div class="mini" id="bizAddress">Office 1203, Burj Al Salam, Sheikh Zayed Rd, Dubai</div>
+              <div class="pending" id="bizPendingNote" style="display:none;">Update pending review</div></div>
+            <button class="linkbtn" onclick="openContactBusiness()">Update</button>
+          </div>
+        </div>
+
+        <div class="sec">People &amp; roles</div>
+        <div class="node-company">
+          <div class="glyph">▣</div>
+          <div><div class="n" id="nodeCompanyName">Yalla LLC</div><div class="m" id="nodeCompanyMeta">—</div></div>
+        </div>
+        <div class="rail" id="memberList"></div>
+        <button class="add-btn" onclick="openAddMember()">＋ Add Partner/Shareholder/UBO/KCP/POA</button>
+
+        <div class="meter-wrap">
+          <div class="meter-top"><span>Shareholding allocated</span><b id="ownTotal">100%</b></div>
+          <div class="meter"><div class="meter-fill" id="ownFill"></div></div>
+          <div class="meter-note" id="ownNote">Fully allocated · UBOs recompute at the 25% line</div>
+        </div>
+      </div>
+
+      <div class="stickybar" id="stickybar" style="display:none;">
+        <button class="review-cta" id="reviewCta" onclick="goReview()">Review changes <span class="count" id="reviewCount">0</span></button>
+      </div>
+    </section>
+
+    <!-- ============ REVIEW ============ -->
+    <section class="screen" data-screen="review">
+      <div class="topbar">
+        <div class="back" title="Back" onclick="goWorkspace()">‹</div>
+        <div><h1>Review changes</h1><div class="sub">One review · submitted as separate requests</div></div>
+      </div>
+      <div class="scroll" style="padding-bottom:150px;">
+        <div class="card">
+          <div class="summary-line"><span>Changes</span><b id="sumChanges">0</b></div>
+        </div>
+        <div id="changeList"></div>
+        <div id="blockerNote"></div>
+      </div>
+      <div class="stickybar"><button class="review-cta" id="submitCta" onclick="submitAll()">Submit changes</button></div>
+    </section>
+
+    <!-- ============ TRACKER (confirmation) ============ -->
+    <section class="screen" data-screen="tracker">
+      <div class="topbar">
+        <div><h1>Requests</h1><div class="sub">Structure update · tracked as one bundle</div></div>
+      </div>
+      <div class="scroll" style="padding-bottom:150px;">
+        <div class="done-hero"><div class="ring">✓</div><h2>Changes submitted</h2><p id="doneSummary">—</p></div>
+        <div class="sec">Active bundle</div>
+        <div class="bundle" id="bundleCard">
+          <div class="bh"><div><div class="t">Structure update</div><div class="r" id="bundleRef">Ref ORG-2025-0142 · 16 Jul 2025</div></div><span class="stat review">In progress</span></div>
+          <div class="prog"><div class="prog-fill" id="bundleProg" style="width:0;"></div></div>
+          <div class="prog-note" id="bundleProgNote">—</div>
+          <div id="childList"></div>
+        </div>
+      </div>
+      <div class="stickybar">
+        <div class="dual">
+          <button class="review-cta ghost" onclick="enterWorkspace()">Make another request</button>
+          <button class="review-cta" onclick="goLanding()">Back to services</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SHEETS ============ -->
+    <div class="sheet-scrim" id="scrim" onclick="closeSheet()"></div>
+
+    <div class="sheet" id="sheetCompany">
+      <div class="grab"></div><h2>Switch company</h2><p class="subh">Structures you can manage</p>
+      <div id="companyOptions"></div><button class="sheet-ghost" onclick="closeSheet()">Close</button>
+    </div>
+
+    <div class="sheet" id="sheetMember">
+      <div class="grab"></div><h2 id="smName">Member</h2><p class="subh" id="smMeta">—</p>
+      <div class="sheet-error" id="smError"></div>
+      <div id="smActions"></div><button class="sheet-ghost" onclick="closeSheet()">Close</button>
+    </div>
+
+    <div class="sheet" id="sheetConfirm">
+      <div class="grab"></div><h2 id="cfTitle">Remove?</h2><p class="subh" id="cfBody">—</p>
+      <button class="sheet-primary" id="cfBtn" onclick="doConfirm()">Remove</button>
+      <button class="sheet-ghost" onclick="cancelConfirm()">Cancel</button>
+    </div>
+
+    <div class="sheet" id="sheetOwn">
+      <div class="grab"></div><h2>Change ownership</h2><p class="subh" id="soName">—</p>
+      <div class="stepper"><button onclick="stepOwn(-5)">−</button><div class="val"><span id="soVal">0</span><small>%</small></div><button onclick="stepOwn(5)">＋</button></div>
+      <div class="warnrow" id="soUboNote" style="margin-bottom:14px;"></div>
+      <button class="sheet-primary" onclick="applyOwn()">Save ownership</button>
+      <button class="sheet-ghost" onclick="openMemberSheet(currentMemberId)">Back</button>
+    </div>
+
+    <div class="sheet" id="sheetLicence">
+      <div class="grab"></div><h2>Update trade licence</h2><p class="subh" id="licSub">—</p>
+      <div class="field-label">New trade licence document</div>
+      <div class="upload-box" id="licUpload" onclick="toggleLicUpload()"><span class="idthumb"></span>＋ Upload trade licence</div>
+      <div class="mini" id="licHint" style="margin-bottom:12px;">Upload the licence document to read its number and expiry.</div>
+      <div id="licDetails" style="display:none;">
+        <div class="field-label">Licence number · auto-extracted</div>
+        <div class="field-value" id="licNoExtract" style="font-size:14px;margin-bottom:12px;">—</div>
+        <div class="field-label">Expiry date · auto-extracted</div>
+        <div class="field-value" id="licExpiryExtract" style="font-size:14px;margin-bottom:14px;">—</div>
+      </div>
+      <button class="sheet-primary" id="licSave" disabled onclick="applyLicence()">Save trade licence</button>
+      <button class="sheet-ghost" onclick="closeSheet()">Cancel</button>
+    </div>
+
+    <div class="sheet" id="sheetId">
+      <div class="grab"></div><h2>Update ID document</h2><p class="subh" id="idName">—</p>
+      <div class="seg" id="idSeg"></div>
+      <div id="idSlots"></div>
+      <div class="warnrow" style="margin-bottom:12px;">Replaces the ID on file. Submitted as an ID Documents Update.</div>
+      <button class="sheet-primary" id="idConfirm" disabled onclick="applyIdUpdate()">Save ID document</button>
+      <button class="sheet-ghost" onclick="openMemberSheet(currentMemberId)">Back</button>
+    </div>
+
+    <div class="sheet" id="sheetContact">
+      <div class="grab"></div><h2 id="ctTitle">Update contact details</h2><p class="subh" id="ctSub">—</p>
+      <div class="field-label">Email address</div><input class="inp" id="ctEmail" autocomplete="off">
+      <div class="field-label">Mobile number</div><input class="inp" id="ctPhone" autocomplete="off">
+      <div id="ctAddressWrap" style="display:none;">
+        <div class="field-label">Business address</div><input class="inp" id="ctAddress" autocomplete="off">
+      </div>
+      <button class="sheet-primary" id="ctSave" onclick="applyContact()">Update contact details</button>
+      <button class="sheet-ghost" onclick="closeSheet()">Cancel</button>
+    </div>
+
+    <div class="sheet" id="sheetAdd">
+      <div class="grab"></div><h2>Add a person</h2><p class="subh">A signatory, key contact, POA holder — or a combination</p>
+      <div class="field-label">Full name</div><input class="inp" id="addName" placeholder="e.g. Sara Al Mansoori" autocomplete="off">
+      <div class="field-label">Roles</div>
+      <div class="toggle-row"><div class="lbl">Authorised signatory<small>Can approve requests &amp; letters</small></div><div class="switch" id="addSig" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+      <div class="toggle-row"><div class="lbl">Key contact person<small>Bank's point of contact</small></div><div class="switch" id="addKC" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+      <div class="toggle-row"><div class="lbl">Power of attorney<small>Acts on the company's behalf</small></div><div class="switch" id="addPOA" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+      <div class="field-label" style="margin-top:14px;">Identity document</div>
+      <div class="upload-box" id="addUpload" onclick="toggleAddUpload()"><span class="idthumb"></span>＋ Attach Emirates ID or passport</div>
+      <button class="sheet-primary" onclick="applyAdd()">Add person</button>
+      <button class="sheet-ghost" onclick="closeSheet()">Cancel</button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+  <button class="reset-btn" onclick="resetProto()">↺ Reset prototype</button>
+  <div class="credit"><span class="by">Prototype by</span><img src="data:image/png;base64,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" alt="Apostrophy"></div>
+</div>
+
+<script>
+"use strict";
+
+const companies = {
+  c1:{ id:"c1", name:"Yalla LLC", licence:"DED · CN-1938472", licenceExpiry:"Expires 14 Mar 2026", licenceReplacing:false,
+    bizEmail:"finance@yalla.ae", bizPhone:"+971 4 555 0100", bizAddress:"Office 1203, Burj Al Salam, Sheikh Zayed Rd, Dubai", bizContactUpdated:false,
+    people:[
+      { id:"m1", name:"Maryam",  ownership:60, origOwn:60, sig:true,  keyContact:false, poa:false, origSig:true,  origKC:false, origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" },
+      { id:"m2", name:"Mohammed",ownership:30, origOwn:30, sig:false, keyContact:false, poa:false, origSig:false, origKC:false, origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" },
+      { id:"m3", name:"Khadija", ownership:10, origOwn:10, sig:true,  keyContact:false, poa:false, origSig:true,  origKC:false, origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" },
+      { id:"m4", name:"Omar Farouk", ownership:0, origOwn:0, sig:false, keyContact:true, poa:true, origSig:false, origKC:true, origPOA:true, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" }
+    ]},
+  c2:{ id:"c2", name:"Al Noor Trading LLC", licence:"DED · CN-2077431", licenceExpiry:"Expires 09 Sep 2026", licenceReplacing:false,
+    bizEmail:"accounts@alnoor.ae", bizPhone:"+971 4 555 0200", bizAddress:"Warehouse 7, Al Quoz Industrial 3, Dubai", bizContactUpdated:false,
+    people:[
+      { id:"a1", name:"Ahmed",  ownership:100, origOwn:100, sig:true,  keyContact:false, poa:false, origSig:true,  origKC:false, origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" },
+      { id:"a2", name:"Rajesh", ownership:0,   origOwn:0,   sig:false, keyContact:true,  poa:false, origSig:false, origKC:true,  origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" },
+      { id:"a3", name:"Sara",   ownership:0,   origOwn:0,   sig:true,  keyContact:true,  poa:false, origSig:true,  origKC:true,  origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" }
+    ]},
+  c3:{ id:"c3", name:"Marina Bay Logistics FZ-LLC", licence:"IFZA · 12345-01", licenceExpiry:"Expires 21 Jan 2027", licenceReplacing:false,
+    bizEmail:"ops@marinabay.ae", bizPhone:"+971 4 555 0300", bizAddress:"Unit 22, IFZA Business Park, Dubai Silicon Oasis", bizContactUpdated:false,
+    people:[
+      { id:"f1", name:"Layla Haddad", ownership:100, origOwn:100, sig:true, keyContact:true, poa:false, origSig:true, origKC:true, origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" },
+      { id:"f2", name:"Karim Nasr", ownership:0, origOwn:0, sig:false, keyContact:false, poa:true, origSig:false, origKC:false, origPOA:true, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" }
+    ]}
+};
+const INITIAL_COMPANIES = JSON.parse(JSON.stringify(companies));
+
+let activeCompanyId="c1", currentMemberId=null, addSeq=0, ownDraft=0;
+let idDocType="eid", idAttached={front:false,back:false,passport:false}, contactMode="individual";
+let submittedBundles=[];
+const seededRequests=[
+  {title:"Balance confirmation letter", date:"02 Oct 2025", status:"In progress"},
+  {title:"IBAN letter", date:"13 Aug 2025", status:"In progress"}
+];
+
+const $ = s => document.querySelector(s);
+const co = () => companies[activeCompanyId];
+const initials = n => n.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+
+const totalOwn = () => co().people.reduce((s,p)=>s+Number(p.ownership||0),0);
+const isUBO = p => Number(p.ownership)>=25;
+const sigCount = () => co().people.filter(p=>p.sig).length;
+const kcCount  = () => co().people.filter(p=>p.keyContact).length;
+
+/* change detection */
+function personChanges(p){
+  if(p.status==="new") return ["new"];
+  const c=[];
+  if(p.ownership!==p.origOwn) c.push("own");
+  if(p.sig!==p.origSig) c.push(p.sig?"sig+":"sig-");
+  if(p.keyContact!==p.origKC) c.push(p.keyContact?"kc+":"kc-");
+  if(p.poa!==p.origPOA) c.push(p.poa?"poa+":"poa-");
+  if(p.docUpdated) c.push("doc");
+  if(p.contactUpdated) c.push("contact");
+  return c;
+}
+function countStagedChanges(){
+  let n=0;
+  if(co().licenceReplacing) n++;
+  if(co().bizContactUpdated) n++;
+  co().people.forEach(p=>{ if(personChanges(p).length) n++; });
+  return n;
+}
+const isRemoval = k => k==="sig-"||k==="kc-"||k==="poa-";
+
+function roleMeta(p){ return p.ownership>0 ? p.ownership+"% owner" : "Non-owner"; }
+
+/* people-card chips: standing roles + action chips */
+function chip(label,type){
+  const cls = type==="role" ? "pill role" : type==="rem" ? "pill solid" : type==="add" ? "pill dash" : "pill";
+  return '<span class="'+cls+'">'+label+'</span>';
+}
+function memberChips(p){
+  const out=[];
+  if(isUBO(p)) out.push(chip("UBO","out"));
+  if(p.sig) out.push(chip("AUTH SIGNATORY","role"));
+  if(p.keyContact) out.push(chip("KCP","role"));
+  if(p.poa) out.push(chip("POA","role"));
+  personChanges(p).forEach(k=>{
+    if(k==="new") out.push(chip("NEW","add"));
+    else if(k==="own") out.push(chip("OWNERSHIP EDITED","add"));
+    else if(k==="sig+") out.push(chip("SIGNATORY ADDED","add"));
+    else if(k==="sig-") out.push(chip("SIGNATORY REMOVED","rem"));
+    else if(k==="kc+") out.push(chip("KCP ADDED","add"));
+    else if(k==="kc-") out.push(chip("KCP REMOVED","rem"));
+    else if(k==="poa+") out.push(chip("POA ADDED","add"));
+    else if(k==="poa-") out.push(chip("POA REMOVED","rem"));
+    else if(k==="doc") out.push(chip("ID: "+(p.docType||"UPDATED"),"add"));
+    else if(k==="contact") out.push(chip("CONTACT UPDATED","add"));
+  });
+  return out;
+}
+function renderMembers(){
+  const list=$("#memberList"); list.innerHTML="";
+  co().people.forEach(p=>{
+    const el=document.createElement("div");
+    el.className="member"+(p.status==="new"?" isnew":"");
+    el.tabIndex=0; el.onclick=()=>openMemberSheet(p.id); el.onkeydown=e=>{ if(e.key==="Enter") openMemberSheet(p.id); };
+    const chips=memberChips(p);
+    el.innerHTML='<div class="mtop"><div class="avatar">'+initials(p.name)+'</div>'+
+      '<div><div class="name">'+p.name+'</div><div class="meta">'+roleMeta(p)+'</div></div>'+
+      '<div class="chev">›</div></div>'+(chips.length?'<div class="pills">'+chips.join("")+'</div>':'');
+    list.appendChild(el);
+  });
+}
+function renderWorkspace(){
+  $("#wsCompanyName").textContent=co().name;
+  $("#nodeCompanyName").textContent=co().name;
+  $("#nodeCompanyMeta").textContent=co().people.length+" people · "+sigCount()+" signatory"+(sigCount()===1?"":"ies")+" · "+kcCount()+" key contact"+(kcCount()===1?"":"s");
+  if(co().licenceReplacing){ $("#licenceNo").textContent=co().pendingLicenceNo||co().licence; $("#licenceMeta").textContent="New licence · pending review"; $("#licenceBtn").textContent="Undo"; $("#licenceCard").style.borderStyle="dashed"; }
+  else { $("#licenceNo").textContent=co().licence; $("#licenceMeta").textContent=co().licenceExpiry; $("#licenceBtn").textContent="Update"; $("#licenceCard").style.borderStyle="solid"; }
+  $("#bizEmail").textContent=co().bizEmail;
+  $("#bizPhone").textContent=co().bizPhone;
+  $("#bizAddress").textContent=co().bizAddress;
+  $("#bizPendingNote").style.display=co().bizContactUpdated?"block":"none";
+  $("#bizContactCard").style.borderStyle=co().bizContactUpdated?"dashed":"solid";
+  const t=totalOwn(); $("#ownTotal").textContent=t+"%"; $("#ownFill").style.width=Math.min(t,100)+"%";
+  const note=$("#ownNote");
+  if(t===100){ note.className="meter-note"; note.textContent="Fully allocated · UBOs recompute at the 25% line"; }
+  else { note.className="meter-note warn"; note.textContent="Must total 100% before submitting · currently "+t+"%"; }
+  renderMembers();
+  const n=countStagedChanges(), bar=$("#stickybar");
+  if(n===0){ bar.style.display="none"; } else { bar.style.display="block"; $("#reviewCount").textContent=n; }
+}
+
+/* sheets */
+function openSheet(id){ $("#scrim").classList.add("open"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open")); $(id).classList.add("open"); }
+function closeSheet(){ $("#scrim").classList.remove("open"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open")); }
+
+/* company switcher */
+function openCompanySwitch(){
+  const wrap=$("#companyOptions"); wrap.innerHTML="";
+  Object.values(companies).forEach(c=>{
+    const b=document.createElement("button"); b.className="act"+(c.id===activeCompanyId?" active-co":"");
+    let pending=(c.licenceReplacing?1:0)+(c.bizContactUpdated?1:0)+c.people.filter(p=>personChanges(p).length).length;
+    b.innerHTML='<div class="ico">▣</div><div class="txt">'+c.name+'<small>'+c.licence+(pending?' · '+pending+' pending change'+(pending>1?'s':''):'')+'</small></div>'+(c.id===activeCompanyId?'<div class="chev">✓</div>':'<div class="chev">›</div>');
+    b.onclick=()=>selectCompany(c.id); wrap.appendChild(b);
+  });
+  openSheet("#sheetCompany");
+}
+function selectCompany(id){ activeCompanyId=id; closeSheet(); renderWorkspace(); toast("Switched to "+co().name); }
+
+/* member sheet */
+function showSmError(msg){ const e=$("#smError"); e.innerHTML="<b>! </b>"+msg; e.classList.add("show"); }
+function openMemberSheet(id){
+  currentMemberId=id;
+  const p=co().people.find(x=>x.id===id);
+  $("#smName").textContent=p.name;
+  $("#smMeta").textContent=roleMeta(p)+(p.sig?" · Signatory":"")+(p.keyContact?" · KCP":"")+(p.poa?" · POA":"")+(isUBO(p)?" · UBO":"");
+  $("#smError").classList.remove("show");
+  const wrap=$("#smActions"); wrap.innerHTML="";
+  wrap.appendChild(actionBtn("％","Change ownership", p.ownership+"% today",()=>openOwn(id)));
+  wrap.appendChild(actionBtn("✎", p.sig?"Remove authorised signatory":"Add as authorised signatory", p.sig?"Currently a signatory":"Not a signatory", ()=>toggleSig(p)));
+  wrap.appendChild(actionBtn("☏", p.keyContact?"Remove key contact person":"Add as key contact person", p.keyContact?"Currently a key contact":"Not a key contact", ()=>toggleKC(p)));
+  wrap.appendChild(actionBtn("§", p.poa?"Remove power of attorney":"Add power of attorney", p.poa?"Currently holds POA":"No POA", ()=>togglePOA(p)));
+  wrap.appendChild(actionBtn("⇪","Update ID document", p.docUpdated?("New "+p.docType+" attached"):"Emirates ID or passport", ()=>openId(id)));
+  wrap.appendChild(actionBtn("✉","Update contact details / email", p.contactUpdated?"Update added":"Individual email & mobile", ()=>openContactIndividual(id)));
+  if(p.status==="new"){ const d=actionBtn("↺","Discard added person","Removes this un-submitted addition",()=>askConfirm("Discard "+p.name+"?","This removes the person you added. Nothing has been submitted yet.","Discard person",()=>{ co().people=co().people.filter(x=>x.id!==id); afterEdit("Removed from your changes"); })); d.classList.add("danger"); wrap.appendChild(d); }
+  openSheet("#sheetMember");
+}
+function actionBtn(ico,title,sub,fn){ const b=document.createElement("button"); b.className="act"; b.innerHTML='<div class="ico">'+ico+'</div><div class="txt">'+title+'<small>'+sub+'</small></div><div class="chev">›</div>'; b.onclick=fn; return b; }
+function afterEdit(msg){ closeSheet(); renderWorkspace(); toast(msg); }
+
+let pendingConfirmFn=null;
+function askConfirm(title, body, confirmLabel, fn){ $("#cfTitle").textContent=title; $("#cfBody").textContent=body; $("#cfBtn").textContent=confirmLabel; pendingConfirmFn=fn; openSheet("#sheetConfirm"); }
+function doConfirm(){ const fn=pendingConfirmFn; pendingConfirmFn=null; closeSheet(); if(fn) fn(); }
+function cancelConfirm(){ pendingConfirmFn=null; openMemberSheet(currentMemberId); }
+
+function toggleSig(p){
+  if(p.sig){
+    if(sigCount()===1){ showSmError("At least one authorised signatory is required. Add another signatory before removing this one."); return; }
+    askConfirm("Remove authorised signatory?", p.name+" will no longer be able to approve requests and letters for the business.", "Remove signatory", ()=>{ p.sig=false; afterEdit("Added to your changes"); });
+  } else { p.sig=true; afterEdit("Added to your changes"); }
+}
+function toggleKC(p){
+  if(p.keyContact){
+    if(kcCount()===1){ showSmError("At least one key contact person is required. Add another key contact before removing this one."); return; }
+    askConfirm("Remove key contact person?", p.name+" will no longer be the bank's point of contact for the business.", "Remove key contact", ()=>{ p.keyContact=false; afterEdit("Added to your changes"); });
+  } else { p.keyContact=true; afterEdit("Added to your changes"); }
+}
+function togglePOA(p){
+  if(p.poa){
+    askConfirm("Remove power of attorney?", p.name+" will no longer be able to act on the company's behalf.", "Remove POA", ()=>{ p.poa=false; afterEdit("Added to your changes"); });
+  } else { p.poa=true; afterEdit("Added to your changes"); }
+}
+
+/* ownership at individual level */
+function openOwn(id){ currentMemberId=id; const p=co().people.find(x=>x.id===id); ownDraft=p.ownership; $("#soName").textContent=p.name; paintOwnDraft(); openSheet("#sheetOwn"); }
+function stepOwn(d){
+  const others=co().people.filter(x=>x.id!==currentMemberId).reduce((s,x)=>s+x.ownership,0);
+  let next=Math.max(0,Math.min(100,ownDraft+d));
+  if(others+next>100){ next=Math.max(0,100-others); toast("Total can't exceed 100%"); }
+  ownDraft=next; paintOwnDraft();
+}
+function paintOwnDraft(){
+  $("#soVal").textContent=ownDraft;
+  const p=co().people.find(x=>x.id===currentMemberId);
+  const others=co().people.filter(x=>x.id!==currentMemberId).reduce((s,x)=>s+x.ownership,0);
+  const total=others+ownDraft;
+  const wasUBO=p.ownership>=25, willUBO=ownDraft>=25;
+  let ubo = willUBO&&!wasUBO ? "<b>Becomes a UBO.</b> Crossing 25% adds beneficial-owner verification."
+          : !willUBO&&wasUBO ? "<b>Drops below UBO.</b> Under 25% — beneficial-owner status removed."
+          : willUBO ? "<b>UBO.</b> Stays a beneficial owner at 25%+." : "Below the 25% beneficial-owner line.";
+  let totalLine = total===100 ? "All shareholders total 100%." : ("All shareholders would total "+total+"% — must reach 100% to submit.");
+  $("#soUboNote").innerHTML=ubo+"<br>"+totalLine;
+}
+function applyOwn(){ const p=co().people.find(x=>x.id===currentMemberId); p.ownership=ownDraft; afterEdit("Added to your changes"); }
+
+/* ID document update */
+function openId(id){ currentMemberId=id; idDocType="eid"; idAttached={front:false,back:false,passport:false,visa:false}; const p=co().people.find(x=>x.id===id); $("#idName").textContent=p.name+" · replaces the ID on file"; renderId(); openSheet("#sheetId"); }
+function setIdType(t){ idDocType=t; idAttached={front:false,back:false,passport:false,visa:false}; renderId(); }
+function toggleId(k){ idAttached[k]=!idAttached[k]; renderId(); }
+function slotHtml(key,label){ const on=idAttached[key]; return '<div class="upload-box'+(on?' done':'')+'" onclick="toggleId(\''+key+'\')"><span class="idthumb"></span>'+(on?("✓ "+label+" attached"):("＋ Upload "+label.toLowerCase()))+'</div>'; }
+function renderId(){
+  $("#idSeg").innerHTML='<button class="'+(idDocType==="eid"?"on":"")+'" onclick="setIdType(\'eid\')">Emirates ID</button><button class="'+(idDocType==="passport"?"on":"")+'" onclick="setIdType(\'passport\')">Passport</button><button class="'+(idDocType==="visa"?"on":"")+'" onclick="setIdType(\'visa\')">Visa</button>';
+  const slots=$("#idSlots");
+  if(idDocType==="eid") slots.innerHTML='<div class="field-label">Emirates ID — front</div>'+slotHtml("front","Front")+'<div class="field-label">Emirates ID — back</div>'+slotHtml("back","Back");
+  else if(idDocType==="passport") slots.innerHTML='<div class="field-label">Passport — photo page</div>'+slotHtml("passport","Photo page");
+  else slots.innerHTML='<div class="field-label">Visa — page</div>'+slotHtml("visa","Visa page");
+  const ok = idDocType==="eid" ? (idAttached.front&&idAttached.back) : idDocType==="passport" ? idAttached.passport : idAttached.visa;
+  $("#idConfirm").disabled=!ok;
+}
+function applyIdUpdate(){ const p=co().people.find(x=>x.id===currentMemberId); p.docUpdated=true; p.docType=(idDocType==="eid"?"Emirates ID":idDocType==="passport"?"Passport":"Visa"); afterEdit("Added to your changes"); }
+
+/* contact update */
+function openContactIndividual(id){ currentMemberId=id; contactMode="individual"; const p=co().people.find(x=>x.id===id); $("#ctTitle").textContent="Update contact details"; $("#ctSub").textContent=p.name+" · individual"; $("#ctEmail").value=""; $("#ctPhone").value=""; $("#ctAddressWrap").style.display="none"; $("#ctSave").textContent="Update contact details"; openSheet("#sheetContact"); }
+function openContactBusiness(){ contactMode="business"; $("#ctTitle").textContent="Update business contact"; $("#ctSub").textContent=co().name+" · business"; $("#ctEmail").value=co().bizEmail; $("#ctPhone").value=co().bizPhone; $("#ctAddress").value=co().bizAddress; $("#ctAddressWrap").style.display="block"; $("#ctSave").textContent="Update business contact"; openSheet("#sheetContact"); }
+function applyContact(){
+  if(contactMode==="individual"){ const p=co().people.find(x=>x.id===currentMemberId); p.contactUpdated=true; afterEdit("Added to your changes"); }
+  else {
+    co().bizContactUpdated=true;
+    if($("#ctEmail").value.trim()) co().bizEmail=$("#ctEmail").value.trim();
+    if($("#ctPhone").value.trim()) co().bizPhone=$("#ctPhone").value.trim();
+    if($("#ctAddress").value.trim()) co().bizAddress=$("#ctAddress").value.trim();
+    afterEdit("Added to your changes");
+  }
+}
+
+/* add person */
+function toggleAddUpload(){ const up=$("#addUpload"); up.classList.toggle("done"); up.innerHTML='<span class="idthumb"></span>'+(up.classList.contains("done")?"✓ Identity document attached":"＋ Attach Emirates ID or passport"); }
+function openAddMember(){ $("#addName").value=""; ["addSig","addKC","addPOA"].forEach(i=>$("#"+i).classList.remove("on")); const up=$("#addUpload"); up.classList.remove("done"); up.innerHTML='<span class="idthumb"></span>＋ Attach Emirates ID or passport'; openSheet("#sheetAdd"); }
+function applyAdd(){
+  const name=$("#addName").value.trim(); if(!name){ toast("Add a name first"); return; }
+  const sig=$("#addSig").classList.contains("on"), kc=$("#addKC").classList.contains("on"), poa=$("#addPOA").classList.contains("on");
+  if(!sig&&!kc&&!poa){ toast("Pick at least one role"); return; }
+  const docOk=$("#addUpload").classList.contains("done");
+  addSeq++;
+  co().people.push({ id:"n"+addSeq, name, ownership:0, origOwn:0, sig, keyContact:kc, poa, origSig:false, origKC:false, origPOA:false, doc:"new", docUpdated:false, docType:null, contactUpdated:false, status:"new", docProvided:docOk });
+  afterEdit("Added to your changes");
+}
+
+/* trade licence update flow (no allocation) */
+function toggleLicence(){
+  if(co().licenceReplacing){ co().licenceReplacing=false; co().pendingLicenceNo=null; co().pendingLicenceExpiry=null; renderWorkspace(); toast("Removed from your changes"); }
+  else openLicence();
+}
+function toggleLicUpload(){
+  const up=$("#licUpload"); up.classList.toggle("done");
+  const done=up.classList.contains("done");
+  up.innerHTML='<span class="idthumb"></span>'+(done?"✓ Trade licence attached":"＋ Upload trade licence");
+  if(done){
+    $("#licNoExtract").textContent=co().licence;
+    $("#licExpiryExtract").textContent=bumpYear((co().licenceExpiry||"").replace("Expires ",""));
+    $("#licDetails").style.display="block"; $("#licHint").style.display="none";
+  } else {
+    $("#licNoExtract").textContent="—"; $("#licExpiryExtract").textContent="—";
+    $("#licDetails").style.display="none"; $("#licHint").style.display="block";
+  }
+  $("#licSave").disabled=!done;
+}
+function bumpYear(str){ return (str||"").replace(/(\d{4})/, m=>String(parseInt(m,10)+1)); }
+function openLicence(){
+  $("#licSub").textContent=co().name+" · replace the licence document on file";
+  const up=$("#licUpload"); up.classList.remove("done"); up.innerHTML='<span class="idthumb"></span>＋ Upload trade licence';
+  $("#licDetails").style.display="none"; $("#licHint").style.display="block";
+  $("#licNoExtract").textContent="—"; $("#licExpiryExtract").textContent="—";
+  $("#licSave").disabled=true;
+  openSheet("#sheetLicence");
+}
+function applyLicence(){
+  co().licenceReplacing=true;
+  co().pendingLicenceNo = $("#licNoExtract").textContent;
+  co().pendingLicenceExpiry = "Expires "+$("#licExpiryExtract").textContent;
+  afterEdit("Added to your changes");
+}
+
+/* review */
+function roleWord(k){ return {"sig+":"add as signatory","sig-":"remove as signatory","kc+":"add as key contact","kc-":"remove as key contact","poa+":"grant POA","poa-":"revoke POA","contact":"contact details"}[k]; }
+function reqForChange(k){
+  return {
+    "sig+":{name:"Authorised Signatory Addition",sla:"review"},
+    "sig-":{name:"Authorised Signatory Removal",sla:"review"},
+    "kc+":{name:"Key Contact Person Addition",sla:"review"},
+    "kc-":{name:"Key Contact Person Removal",sla:"review"},
+    "poa+":{name:"Power of Attorney Addition",sla:"review"},
+    "poa-":{name:"Power of Attorney Removal",sla:"review"},
+    "doc":{name:"ID Documents Update",sla:"review"},
+    "contact":{name:"Update Contact Details / Email — Individual",sla:"review"}
+  }[k];
+}
+function buildChangeSet(){
+  const set=[];
+  if(co().licenceReplacing){
+    set.push({ title:"Update trade licence", detail:(co().pendingLicenceNo||"")+" · "+(co().pendingLicenceExpiry||"").replace("Expires ","expires "), requests:[{name:"Trade License Update",sla:"instant"}], docNeeded:true, docOk:true, warnings:["New licence document will be verified on file."] });
+  }
+  if(co().bizContactUpdated) set.push({ title:"Update business contact", detail:"Email, mobile & business address", requests:[{name:"Update Contact Details / Email — Business",sla:"review"}], docNeeded:false, docOk:true, warnings:[] });
+  co().people.forEach(p=>{
+    const ch=personChanges(p); if(!ch.length) return;
+    if(p.status==="new"){
+      const reqs=[];
+      if(p.sig) reqs.push({name:"Authorised Signatory Addition",sla:"review"});
+      if(p.keyContact) reqs.push({name:"Key Contact Person Addition",sla:"review"});
+      if(p.poa) reqs.push({name:"Power of Attorney Addition",sla:"review"});
+      reqs.push({name:"ID Documents Update",sla:"review"});
+      const roles=[p.sig?"signatory":null,p.keyContact?"key contact":null,p.poa?"POA":null].filter(Boolean).join(" · ");
+      set.push({ title:"Add "+p.name, detail:roles, requests:reqs, docNeeded:true, docOk:!!p.docProvided, warnings:[] });
+      return;
+    }
+    const reqs=[], warns=[];
+    ch.forEach(k=>{
+      if(k==="own"){ reqs.push({name:"Ownership Update",sla:"review"}); const wasU=p.origOwn>=25,isU=p.ownership>=25; if(wasU!==isU) warns.push(p.name+(isU?" crosses into":" drops below")+" the 25% UBO line — beneficial-owner set recomputed."); }
+      else reqs.push(reqForChange(k));
+    });
+    const detail=ch.map(k=> k==="own"?("ownership "+p.origOwn+"%→"+p.ownership+"%") : k==="doc"?("new "+(p.docType||"ID")) : roleWord(k)).join(" · ");
+    set.push({ title:"Update "+p.name, detail, requests:reqs, docNeeded:ch.includes("doc"), docOk:true, warnings:warns });
+  });
+  return set;
+}
+function renderReview(){
+  const set=buildChangeSet(), list=$("#changeList"); list.innerHTML="";
+  let reqTotal=0, instant=0;
+  set.forEach(c=>{
+    const blocked=c.docNeeded && !c.docOk;
+    const el=document.createElement("div"); el.className="change-item"+(blocked?" blocker":"");
+    reqTotal+=c.requests.length; c.requests.forEach(r=>{ if(r.sla==="instant") instant++; });
+    const reqs=c.requests.map(r=>'<div class="req"><span class="dot"></span>'+r.name+'</div>').join("");
+    let warns=(c.warnings||[]).map(w=>'<div class="warnrow"><b>!</b><span>'+w+'</span></div>').join("");
+    if(blocked) warns+='<div class="warnrow"><b>!</b><span><b>Document required.</b> Attach an ID before this can be submitted.</span></div>';
+    el.innerHTML='<div class="ci-title">'+c.title+'</div><div class="ci-detail">'+c.detail+'</div>'+
+      '<div class="maps"><div class="mh">'+c.requests.length+' service request'+(c.requests.length>1?"s":"")+'</div>'+reqs+'</div>'+warns;
+    list.appendChild(el);
+  });
+  $("#sumChanges").textContent=set.length;
+  const docsOk=set.every(c=>!(c.docNeeded&&!c.docOk));
+  const blockers=[];
+  if(totalOwn()!==100) blockers.push("Shareholding totals "+totalOwn()+"% — all shareholders must total 100%.");
+  if(!docsOk) blockers.push("One or more added people still need an ID document.");
+  if(sigCount()===0) blockers.push("The business must keep at least one authorised signatory.");
+  if(kcCount()===0) blockers.push("The business must keep at least one key contact person.");
+  const cta=$("#submitCta"), bn=$("#blockerNote");
+  if(blockers.length){
+    cta.disabled=true; cta.textContent="Resolve "+blockers.length+" item"+(blockers.length>1?"s":"")+" to submit";
+    bn.innerHTML='<div class="card blocker" style="margin-top:8px;">'+blockers.map(b=>'<div class="warnrow" style="background:transparent;border:none;padding:4px 0;"><b>!</b><span>'+b+'</span></div>').join("")+'</div>';
+  } else { cta.disabled=false; cta.textContent="Submit "+reqTotal+" request"+(reqTotal>1?"s":""); bn.innerHTML=""; }
+  return {set,reqTotal};
+}
+
+/* catalogue */
+const catData={
+  biz:{ title:"Business services", sub:"Account & company services", items:[
+    {n:"Account Conversion (Upgrade)",sla:"instant"},
+    {n:"Cheque Book Issuance",sla:"review"},
+    {n:"Dormant Account Activation",sla:"review"},
+    {n:"Company Name Change",sla:"review"},
+    {n:"FATCA Update",sla:"review"} ]},
+  letters:{ title:"Letters & certificates", sub:"Request official documents", items:[
+    {n:"IBAN Letter",sla:"instant"},
+    {n:"Authorisation Letter",sla:"review"},
+    {n:"Balance Confirmation Letter",sla:"review"},
+    {n:"Capital Letter",sla:"review"},
+    {n:"Liability Letter",sla:"review"},
+    {n:"No Liability Letter",sla:"review"},
+    {n:"Reference Letter",sla:"review"} ]}
+};
+function openCatalogue(key){
+  const d=catData[key]; $("#catTitle").textContent=d.title; $("#catSub").textContent=d.sub;
+  const list=$("#catList"); list.innerHTML="";
+  d.items.forEach(it=>{
+    const row=document.createElement("div"); row.className="cat-row";
+    let tags="";
+    if(it.sla==="instant") tags+='<span class="pill solid">INSTANT</span>';
+    if(it.flag==="proposed") tags+='<span class="pill dash">PROPOSED</span>';
+    row.innerHTML='<div class="cn">'+it.n+'</div>'+(tags?'<div style="display:flex;gap:5px;">'+tags+'</div>':'')+'<div class="chev">›</div>';
+    row.onclick=()=>toast('Opens the '+it.n+' flow');
+    list.appendChild(row);
+  });
+  show("catalogue");
+}
+
+/* landing requests */
+function renderLandingRequests(){
+  const wrap=$("#landingRequests"); wrap.innerHTML="";
+  const rows=[
+    ...submittedBundles.map(b=>({title:b.title,sub:b.ref+" · "+b.date,status:b.status,bundle:true})),
+    ...seededRequests.map(r=>({title:r.title,sub:r.date,status:r.status}))
+  ];
+  rows.forEach(r=>{
+    const el=document.createElement("div"); el.className="rs-row";
+    el.innerHTML='<div class="rn">'+r.title+'<small>'+r.sub+'</small></div><span class="stat review">'+r.status+'</span>';
+    if(r.bundle){ el.style.cursor="pointer"; el.onclick=()=>show("tracker"); }
+    wrap.appendChild(el);
+  });
+}
+
+/* navigation */
+function show(name){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.dataset.screen===name)); document.querySelectorAll(".scroll").forEach(s=>s.scrollTop=0); }
+function enterWorkspace(){ renderWorkspace(); show("workspace"); }
+function goLanding(){ renderLandingRequests(); show("landing"); }
+function goWorkspace(){ renderWorkspace(); show("workspace"); }
+function goReview(){ if(countStagedChanges()===0){ toast("No changes to review yet"); return; } renderReview(); show("review"); }
+
+/* submit + tracker */
+function commitChanges(){
+  const c=co();
+  if(c.licenceReplacing){
+    if(c.pendingLicenceNo) c.licence=c.pendingLicenceNo;
+    if(c.pendingLicenceExpiry) c.licenceExpiry=c.pendingLicenceExpiry;
+    c.licenceReplacing=false; c.pendingLicenceNo=null; c.pendingLicenceExpiry=null;
+  }
+  c.bizContactUpdated=false;
+  c.people.forEach(p=>{ p.status="existing"; p.origOwn=p.ownership; p.origSig=p.sig; p.origKC=p.keyContact; p.origPOA=p.poa; p.docUpdated=false; p.docType=null; p.contactUpdated=false; p.doc="verified"; delete p.docProvided; });
+}
+function submitAll(){
+  const {set}=renderReview();
+  const children=[];
+  set.forEach(c=>c.requests.forEach(r=>children.push({name:r.name, ctx:c.title.replace(/^(Add|Remove|Update)\s/,""), sla:r.sla})));
+  const cl=$("#childList"); cl.innerHTML=""; let doneCount=0;
+  children.forEach((r,i)=>{
+    let cls,txt;
+    if(r.sla==="instant"){ cls="done"; txt="Completed"; doneCount++; }
+    else { cls="review"; txt="In progress"; }
+    const row=document.createElement("div"); row.className="child";
+    row.innerHTML='<div class="cname">'+r.name+'<small>'+r.ctx+'</small></div><span class="cstat"><span class="stat '+cls+'">'+txt+'</span></span>';
+    cl.appendChild(row);
+  });
+  const pct=children.length?Math.round(doneCount/children.length*100):0;
+  $("#bundleProg").style.width=pct+"%";
+  $("#bundleProgNote").textContent=doneCount+" of "+children.length+" requests complete";
+  $("#doneSummary").textContent=children.length+" requests created from "+set.length+" change"+(set.length>1?"s":"");
+  const ref="ORG-2025-0"+(142+submittedBundles.length);
+  $("#bundleRef").textContent="Ref "+ref+" · 16 Jul 2025";
+  submittedBundles.unshift({ title:"Structure update", ref, date:"16 Jul 2025", status:"In Progress" });
+  commitChanges(); renderLandingRequests(); show("tracker"); toast("Submitted · tracked as one bundle");
+}
+
+/* reset */
+function resetProto(){
+  Object.keys(companies).forEach(id=>{ companies[id]=JSON.parse(JSON.stringify(INITIAL_COMPANIES[id])); });
+  activeCompanyId="c1"; currentMemberId=null; addSeq=0; submittedBundles=[];
+  closeSheet(); renderLandingRequests(); renderWorkspace(); show("landing"); toast("Prototype reset");
+}
+
+/* toast */
+let toastT=null;
+function toast(msg){
+  const t=$("#toast"); t.textContent=msg;
+  const openSheetEl=document.querySelector(".sheet.open");
+  t.style.bottom = openSheetEl ? (openSheetEl.offsetHeight+14)+"px" : "96px";
+  t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),1800);
+}
+
+renderLandingRequests();
+renderWorkspace();
+</script>
+</body>
+</html>
