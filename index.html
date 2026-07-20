@@ -105,6 +105,19 @@
   .pill.dash{border-style:dashed;}
   .pill.role{background:var(--fill);border-color:var(--fill-2);color:var(--ink);}
 
+  .role-card{width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 13px;margin-bottom:9px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;}
+  .role-card:hover{border-color:var(--line-strong);}
+  .role-card.sel{border-color:var(--ink);background:var(--fill);}
+  .role-card .rico{width:30px;height:30px;border-radius:8px;background:var(--fill);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font-size:14px;flex:0 0 auto;color:var(--ink-2);}
+  .role-card .rtxt{flex:1;}
+  .role-card .rtxt b{display:block;font-size:14px;font-weight:650;}
+  .role-card .rtxt small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:2px;line-height:1.4;}
+  .role-card .rmark{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line-2);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;margin-top:2px;}
+  .role-card.sel .rmark{border-color:var(--ink);background:var(--ink);color:#fff;}
+  .phone-row{display:flex;gap:8px;margin-bottom:12px;}
+  .phone-row .cc{flex:0 0 74px;padding:12px 8px;border:1px solid var(--line-2);border-radius:11px;font-size:13px;text-align:center;background:var(--paper);color:var(--ink);}
+  .phone-row .inp{margin-bottom:0;flex:1;}
+
   .add-btn{width:100%;margin-top:12px;padding:12px;border:1.5px dashed var(--line-2);background:transparent;border-radius:12px;font-family:var(--mono);font-size:12px;color:var(--ink-2);cursor:pointer;letter-spacing:.03em;}
   .add-btn:hover{border-color:var(--line-strong);color:var(--ink);}
 
@@ -130,6 +143,11 @@
   .review-cta.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line-2);}
   .dual{display:flex;gap:10px;}
   .dual .review-cta{flex:1;padding:14px 8px;}
+  .dual .sheet-primary,.dual .sheet-ghost{flex:1;margin-top:0;}
+  .stepbar{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:9px 14px;margin:2px 0 18px;}
+  .stepbar .stepfrac{font-family:var(--mono);font-size:11px;color:var(--ink-2);flex:0 0 auto;}
+  .stepbar .steptrack{flex:1;height:5px;border-radius:4px;background:var(--fill-2);overflow:hidden;}
+  .stepbar .stepfill{height:100%;background:var(--ink);border-radius:4px;}
 
   .sheet-scrim{position:absolute;inset:0;z-index:70;background:rgba(20,20,20,.32);opacity:0;pointer-events:none;transition:opacity .2s;}
   .sheet-scrim.open{opacity:1;pointer-events:auto;}
@@ -189,14 +207,7 @@
   .bundle .bh{display:flex;justify-content:space-between;align-items:flex-start;}
   .bundle .bh .t{font-weight:650;font-size:15px;}
   .bundle .bh .r{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:2px;}
-  .prog{height:7px;border-radius:5px;background:var(--fill);border:1px solid var(--line);overflow:hidden;margin:12px 0 6px;}
-  .prog-fill{height:100%;background:var(--line-strong);}
   .prog-note{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);}
-  .child{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line);}
-  .child:first-of-type{border-top:1px dashed var(--line);margin-top:6px;}
-  .child .cname{font-size:13px;}
-  .child .cname small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-top:1px;}
-  .child .cstat{margin-left:auto;}
   .stat{font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:20px;border:1px solid var(--line-2);color:var(--ink-2);white-space:nowrap;}
   .stat.done{background:var(--pill-solid);color:#fff;border-color:var(--pill-solid);}
   .stat.review{background:var(--paper);}
@@ -204,6 +215,12 @@
 
   .toast{position:absolute;bottom:96px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--pill-solid);color:#fff;font-family:var(--mono);font-size:11px;padding:9px 14px;border-radius:22px;z-index:80;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;max-width:80%;text-align:center;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .verify-hero{text-align:center;padding:70px 20px 20px;}
+  .spinner{width:60px;height:60px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--ink);margin:0 auto 22px;animation:spin .9s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .verify-hero h2{font-size:16px;margin:0 0 8px;}
+  .verify-hero p{margin:3px 0;font-family:var(--mono);font-size:11px;color:var(--ink-2);line-height:1.6;}
 
   .done-hero{text-align:center;padding:26px 0 10px;}
   .done-hero .ring{width:64px;height:64px;border-radius:50%;border:2px solid var(--line-strong);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;color:var(--ink);}
@@ -224,7 +241,7 @@
   .credit .by{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);}
   .credit img{height:14px;width:auto;display:block;}
 
-  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
 </head>
 <body>
@@ -254,8 +271,8 @@
         <div class="hero-card" tabindex="0" onclick="enterWorkspace()" onkeydown="if(event.key==='Enter')enterWorkspace()">
           <div class="hico">⚏</div>
           <div>
-            <div class="ht">Manage structure</div>
-            <div class="hd">Signatories, key contacts, power of attorney, ID documents, ownership, trade licence and contact details — edited on the structure, reviewed together.</div>
+            <div class="ht">Company details &amp; people</div>
+            <div class="hd">Manage signatories, ownership, documents and contact details in one place.</div>
           </div>
           <div class="chev">›</div>
         </div>
@@ -296,7 +313,7 @@
     <section class="screen" data-screen="workspace">
       <div class="topbar">
         <div class="back" title="Back" onclick="goLanding()">‹</div>
-        <div><h1>Manage structure</h1><div class="sub">Edit, then review together</div></div>
+        <div><h1>Company details &amp; people</h1></div>
       </div>
       <div class="scroll">
         <div class="sec">Company</div>
@@ -332,7 +349,7 @@
           <div><div class="n" id="nodeCompanyName">Yalla LLC</div><div class="m" id="nodeCompanyMeta">—</div></div>
         </div>
         <div class="rail" id="memberList"></div>
-        <button class="add-btn" onclick="openAddMember()">＋ Add Partner/Shareholder/UBO/KCP/POA</button>
+        <button class="add-btn" onclick="openAddMember()">＋ Add Partner/Shareholder/UBO/POA</button>
 
         <div class="meter-wrap">
           <div class="meter-top"><span>Shareholding allocated</span><b id="ownTotal">100%</b></div>
@@ -371,16 +388,167 @@
         <div class="done-hero"><div class="ring">✓</div><h2>Changes submitted</h2><p id="doneSummary">—</p></div>
         <div class="sec">Active bundle</div>
         <div class="bundle" id="bundleCard">
-          <div class="bh"><div><div class="t">Structure update</div><div class="r" id="bundleRef">Ref ORG-2025-0142 · 16 Jul 2025</div></div><span class="stat review">In progress</span></div>
-          <div class="prog"><div class="prog-fill" id="bundleProg" style="width:0;"></div></div>
-          <div class="prog-note" id="bundleProgNote">—</div>
-          <div id="childList"></div>
+          <div class="bh"><div><div class="t">Structure update</div><div class="r" id="bundleRef">Ref ORG-2025-0142 · 16 Jul 2025</div></div><span class="stat review" id="bundleStat">In progress</span></div>
+          <div class="prog-note" id="bundleProgNote" style="margin-top:12px;">—</div>
         </div>
       </div>
       <div class="stickybar">
         <div class="dual">
           <button class="review-cta ghost" onclick="enterWorkspace()">Make another request</button>
           <button class="review-cta" onclick="goLanding()">Back to services</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ADD PARTNER/SHAREHOLDER/UBO/POA (4-step) ============ -->
+    <section class="screen" data-screen="addStep1">
+      <div class="topbar">
+        <div><h1>New Partner/Shareholder/UBO/POA</h1></div>
+      </div>
+      <div class="scroll" style="padding-bottom:110px;">
+        <div class="stepbar"><span class="stepfrac">1 / 4</span><div class="steptrack"><div class="stepfill" style="width:25%;"></div></div></div>
+        <div class="card">
+          <div style="font-weight:650;font-size:14px;margin-bottom:11px;">Role in the Company</div>
+          <div class="role-card sel" id="roleCardPartner" onclick="selectAddRole('partner')">
+            <div class="rico">▣</div>
+            <div class="rtxt"><b>Partner / Shareholder / UBO</b><small>Individual with ownership or beneficial interest</small></div>
+            <div class="rmark">✓</div>
+          </div>
+          <div class="role-card" id="roleCardPoa" onclick="selectAddRole('poa')" style="margin-bottom:0;">
+            <div class="rico">§</div>
+            <div class="rtxt"><b>POA</b><small>Holds Power of Attorney</small></div>
+            <div class="rmark">✓</div>
+          </div>
+        </div>
+        <div class="card" id="addRolesCard">
+          <div class="toggle-row"><div class="lbl">This person an Authorized Signatory<small>Can sign and approve transactions</small></div><div class="switch on" id="addSig" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="toggle-row"><div class="lbl">This person is a Primary person<small>Main contact and decision maker</small></div><div class="switch on" id="addPrimary" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        </div>
+        <div class="card">
+          <div style="font-weight:650;font-size:14px;margin-bottom:11px;">Personal Information</div>
+          <div class="field-label">Full Name</div><input class="inp" id="addName" placeholder="e.g. Sara Al Mansoori" autocomplete="off">
+          <div id="addOwnWrap">
+            <div class="field-label">Company Ownership (%)</div><input class="inp" id="addOwn" placeholder="e.g. 25" inputmode="numeric" autocomplete="off">
+          </div>
+          <div class="field-label">Mobile Number</div>
+          <div class="phone-row"><div class="cc">🇦🇪 +971</div><input class="inp" id="addMobile" placeholder="52 123 4567" autocomplete="off"></div>
+          <div class="field-label">Email</div><input class="inp" id="addEmail" placeholder="name@email.com" autocomplete="off" style="margin-bottom:0;">
+        </div>
+      </div>
+      <div class="stickybar">
+        <div class="dual">
+          <button class="review-cta ghost" onclick="goWorkspace()">Cancel</button>
+          <button class="review-cta" onclick="addStep1Continue()">Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="addStep2">
+      <div class="topbar">
+        <div class="back" title="Back" onclick="show('addStep1')">‹</div>
+        <div><h1>Upload documents</h1></div>
+      </div>
+      <div class="scroll" style="padding-bottom:110px;">
+        <div class="stepbar"><span class="stepfrac">2 / 4</span><div class="steptrack"><div class="stepfill" style="width:50%;"></div></div></div>
+        <p class="mini" style="margin:0 0 16px;">Max file size is 500KB. Supported file types are .jpg and .png.</p>
+        <div class="field-label">Resident Type</div>
+        <select class="inp" id="addResidentType"><option>UAE Resident</option><option>Non-Resident</option></select>
+        <div class="field-label">Emirates ID — Front</div>
+        <div class="upload-box" id="addDocFront" onclick="toggleAddDoc('front')"><span class="idthumb"></span>＋ Tap to upload</div>
+        <div class="field-label">Emirates ID — Back</div>
+        <div class="upload-box" id="addDocBack" onclick="toggleAddDoc('back')"><span class="idthumb"></span>＋ Tap to upload</div>
+        <div class="field-label">Passport</div>
+        <div class="upload-box" id="addDocPassport" onclick="toggleAddDoc('passport')"><span class="idthumb"></span>＋ Tap to upload</div>
+        <div class="field-label">Dual Nationality Passport (Optional)</div>
+        <div class="upload-box" id="addDocDual" onclick="toggleAddDoc('dual')"><span class="idthumb"></span>＋ Tap to upload</div>
+      </div>
+      <div class="stickybar">
+        <div class="dual">
+          <button class="review-cta ghost" onclick="goWorkspace()">Cancel</button>
+          <button class="review-cta" id="addDocsBtn" disabled onclick="addDocsContinue()">Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="addStep3">
+      <div class="topbar">
+        <div class="back" title="Back" onclick="show('addStep2')">‹</div>
+        <div><h1>ID Verification</h1></div>
+      </div>
+      <div class="scroll" style="padding-bottom:110px;">
+        <div class="stepbar"><span class="stepfrac">3 / 4</span><div class="steptrack"><div class="stepfill" style="width:75%;"></div></div></div>
+        <p class="subh" style="margin:0 0 16px;">Ensure your Emirates ID details are correct to prevent application delays.</p>
+        <div class="field-label">Emirates ID Number</div><input class="inp" id="cfEidNumber" autocomplete="off">
+        <div class="field-label">Emirates ID Expiry Date</div><input class="inp" id="cfEidExpiry" autocomplete="off">
+        <div class="field-label">Emirates ID Card Number</div><input class="inp" id="cfEidCardNo" autocomplete="off">
+        <div class="field-label">Date of Birth</div><input class="inp" id="cfDob" autocomplete="off">
+        <div class="field-label">Nationality</div>
+        <select class="inp" id="cfNationality"><option>United Kingdom</option><option>United Arab Emirates</option><option>India</option><option>Pakistan</option><option>Egypt</option><option>Other</option></select>
+        <div class="field-label">Gender</div>
+        <div class="seg" style="margin-bottom:4px;"><button id="cfGenderM" onclick="setCfGender('Male')">Male</button><button id="cfGenderF" onclick="setCfGender('Female')">Female</button></div>
+      </div>
+      <div class="stickybar">
+        <div class="dual">
+          <button class="review-cta ghost" onclick="goWorkspace()">Cancel</button>
+          <button class="review-cta" onclick="addConfirmContinue()">Continue</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="addStep4">
+      <div class="topbar">
+        <div class="back" title="Back" onclick="show('addStep3')">‹</div>
+        <div><h1>Personal Details</h1></div>
+      </div>
+      <div class="scroll" style="padding-bottom:110px;">
+        <div class="stepbar"><span class="stepfrac">4 / 4</span><div class="steptrack"><div class="stepfill" style="width:100%;"></div></div></div>
+        <div class="field-label">Association Type</div>
+        <select class="inp" id="dtAssociation"><option>Authorised Signatory</option><option>Partner / Shareholder / UBO</option><option>Power of Attorney</option><option>Primary Person</option></select>
+        <div class="field-label">First Name</div><input class="inp" id="dtFirstName" autocomplete="off">
+        <div class="field-label">Last Name</div><input class="inp" id="dtLastName" autocomplete="off">
+        <div class="field-label">Title</div>
+        <select class="inp" id="dtTitle"><option value="">— Select —</option><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option></select>
+        <div class="field-label">Mother's Maiden Name</div><input class="inp" id="dtMother" autocomplete="off">
+        <div class="field-label">Nationality</div>
+        <select class="inp" id="dtNationality"><option>United Kingdom</option><option>United Arab Emirates</option><option>India</option><option>Pakistan</option><option>Egypt</option><option>Other</option></select>
+        <div class="field-label">Gender</div>
+        <div class="seg" style="margin-bottom:16px;"><button id="dtGenderM" onclick="setDtGender('Male')">Male</button><button id="dtGenderF" onclick="setDtGender('Female')">Female</button></div>
+        <div class="field-label">Country of Birth</div>
+        <select class="inp" id="dtCountryBirth"><option>United Kingdom</option><option>United Arab Emirates</option><option>India</option><option>Pakistan</option><option>Egypt</option><option>Other</option></select>
+        <div class="field-label">Passport Number</div><input class="inp" id="dtPassportNo" autocomplete="off">
+        <div class="field-label">Passport Expiry Date</div><input class="inp" id="dtPassportExpiry" autocomplete="off">
+        <div class="field-label">Date of Birth</div><input class="inp" id="dtDob" autocomplete="off">
+        <div class="field-label">Emirates ID Number</div><input class="inp" id="dtEidNumber" autocomplete="off">
+        <div class="field-label">Emirates ID Expiry Date</div><input class="inp" id="dtEidExpiry" autocomplete="off">
+        <div class="field-label">Designation (Optional)</div><input class="inp" id="dtDesignation" autocomplete="off">
+        <div class="field-label">Ownership Percentage (%)</div><input class="inp" id="dtOwnership" inputmode="numeric" autocomplete="off">
+
+        <div class="sec">Address to get in touch</div>
+        <div class="field-label">Building Number</div><input class="inp" id="dtBuildingNo" autocomplete="off">
+        <div class="field-label">Building Name</div><input class="inp" id="dtBuildingName" autocomplete="off">
+        <div class="field-label">Street</div><input class="inp" id="dtStreet" autocomplete="off">
+        <div class="field-label">P.O. Box</div><input class="inp" id="dtPoBox" autocomplete="off">
+        <div class="field-label">Country</div>
+        <select class="inp" id="dtCountry"><option>United Arab Emirates</option><option>Other</option></select>
+        <div class="field-label">City/Emirate</div>
+        <select class="inp" id="dtCityEmirate"><option>Abu Dhabi</option><option>Dubai</option><option>Sharjah</option><option>Ajman</option><option>Ras Al Khaimah</option><option>Fujairah</option><option>Umm Al Quwain</option></select>
+
+        <div class="sec">Contact information</div>
+        <div class="field-label">Primary Mobile Number</div>
+        <div class="phone-row"><div class="cc">🇦🇪 +971</div><input class="inp" id="dtMobile" autocomplete="off"></div>
+        <div class="field-label">Office Telephone Number</div>
+        <div class="phone-row"><div class="cc">🇦🇪 +971</div><input class="inp" id="dtOfficeTel" autocomplete="off"></div>
+        <div class="field-label">Home Telephone Number</div>
+        <div class="phone-row"><div class="cc">🇦🇪 +971</div><input class="inp" id="dtHomeTel" autocomplete="off"></div>
+        <div class="field-label">Email Address</div><input class="inp" id="dtEmail" autocomplete="off">
+
+        <p class="mini" style="margin:14px 0 8px;color:var(--ink);">Do you fall under the category of Politically Exposed Person?</p>
+        <div class="seg" style="margin-bottom:4px;"><button id="dtPepY" onclick="setDtPep(true)">Yes</button><button id="dtPepN" onclick="setDtPep(false)">No</button></div>
+      </div>
+      <div class="stickybar">
+        <div class="dual">
+          <button class="review-cta ghost" onclick="goWorkspace()">Cancel</button>
+          <button class="review-cta" onclick="applyAdd()">Save</button>
         </div>
       </div>
     </section>
@@ -417,15 +585,38 @@
       <div class="grab"></div><h2>Update trade licence</h2><p class="subh" id="licSub">—</p>
       <div class="field-label">New trade licence document</div>
       <div class="upload-box" id="licUpload" onclick="toggleLicUpload()"><span class="idthumb"></span>＋ Upload trade licence</div>
-      <div class="mini" id="licHint" style="margin-bottom:12px;">Upload the licence document to read its number and expiry.</div>
+      <div class="mini" id="licOcr" style="display:none;margin-bottom:12px;">Reading document…</div>
       <div id="licDetails" style="display:none;">
-        <div class="field-label">Licence number · auto-extracted</div>
-        <div class="field-value" id="licNoExtract" style="font-size:14px;margin-bottom:12px;">—</div>
-        <div class="field-label">Expiry date · auto-extracted</div>
-        <div class="field-value" id="licExpiryExtract" style="font-size:14px;margin-bottom:14px;">—</div>
+        <p class="mini" style="margin:0 0 14px;">Please review the extracted trade licence details. For any changes, please update them.</p>
+        <div class="field-label">Trade licence number</div>
+        <input class="inp" id="licNoInput" autocomplete="off">
+        <div class="field-label">Issuing authority</div>
+        <select class="inp" id="licAuthInput">
+          <option value="DED">Dubai DED</option>
+          <option value="DET">Abu Dhabi DET</option>
+          <option value="IFZA">IFZA</option>
+          <option value="DMCC">DMCC</option>
+          <option value="FZ">Other free zone</option>
+        </select>
+        <div class="field-label">Expiry date</div>
+        <input class="inp" id="licExpiryInput" autocomplete="off">
+        <div class="toggle-row" style="align-items:flex-start;">
+          <div class="lbl">I consent to FAB validating company details from the issuing authority<small>Recommended — confirms your licence details directly with the issuing authority</small></div>
+          <div class="switch on" id="licConsent" onclick="this.classList.toggle('on'); updateLicSaveState();"><div class="knob"></div></div>
+        </div>
       </div>
-      <button class="sheet-primary" id="licSave" disabled onclick="applyLicence()">Save trade licence</button>
+      <button class="sheet-primary" id="licSave" disabled onclick="continueLicence()">Continue</button>
       <button class="sheet-ghost" onclick="closeSheet()">Cancel</button>
+    </div>
+
+    <div class="sheet" id="sheetLicenceVerify">
+      <div class="grab"></div>
+      <div class="verify-hero">
+        <div class="spinner"></div>
+        <h2>Please wait a moment…</h2>
+        <p>Validating your company information from the issuing authority.</p>
+        <p>Do not close the app, please.</p>
+      </div>
     </div>
 
     <div class="sheet" id="sheetId">
@@ -448,18 +639,6 @@
       <button class="sheet-ghost" onclick="closeSheet()">Cancel</button>
     </div>
 
-    <div class="sheet" id="sheetAdd">
-      <div class="grab"></div><h2>Add a person</h2><p class="subh">A signatory, key contact, POA holder — or a combination</p>
-      <div class="field-label">Full name</div><input class="inp" id="addName" placeholder="e.g. Sara Al Mansoori" autocomplete="off">
-      <div class="field-label">Roles</div>
-      <div class="toggle-row"><div class="lbl">Authorised signatory<small>Can approve requests &amp; letters</small></div><div class="switch" id="addSig" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
-      <div class="toggle-row"><div class="lbl">Key contact person<small>Bank's point of contact</small></div><div class="switch" id="addKC" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
-      <div class="toggle-row"><div class="lbl">Power of attorney<small>Acts on the company's behalf</small></div><div class="switch" id="addPOA" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
-      <div class="field-label" style="margin-top:14px;">Identity document</div>
-      <div class="upload-box" id="addUpload" onclick="toggleAddUpload()"><span class="idthumb"></span>＋ Attach Emirates ID or passport</div>
-      <button class="sheet-primary" onclick="applyAdd()">Add person</button>
-      <button class="sheet-ghost" onclick="closeSheet()">Cancel</button>
-    </div>
 
     <div class="toast" id="toast"></div>
   </div>
@@ -587,7 +766,7 @@ function renderWorkspace(){
   const t=totalOwn(); $("#ownTotal").textContent=t+"%"; $("#ownFill").style.width=Math.min(t,100)+"%";
   const note=$("#ownNote");
   if(t===100){ note.className="meter-note"; note.textContent="Fully allocated · UBOs recompute at the 25% line"; }
-  else { note.className="meter-note warn"; note.textContent="Must total 100% before submitting · currently "+t+"%"; }
+  else { note.className="meter-note warn"; note.textContent="Currently "+t+"% allocated · UBOs recompute at the 25% line"; }
   renderMembers();
   const n=countStagedChanges(), bar=$("#stickybar");
   if(n===0){ bar.style.display="none"; } else { bar.style.display="block"; $("#reviewCount").textContent=n; }
@@ -595,7 +774,7 @@ function renderWorkspace(){
 
 /* sheets */
 function openSheet(id){ $("#scrim").classList.add("open"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open")); $(id).classList.add("open"); }
-function closeSheet(){ $("#scrim").classList.remove("open"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open")); }
+function closeSheet(){ if(licenceVerifying) return; $("#scrim").classList.remove("open"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open")); }
 
 /* company switcher */
 function openCompanySwitch(){
@@ -694,7 +873,7 @@ function applyIdUpdate(){ const p=co().people.find(x=>x.id===currentMemberId); p
 
 /* contact update */
 function openContactIndividual(id){ currentMemberId=id; contactMode="individual"; const p=co().people.find(x=>x.id===id); $("#ctTitle").textContent="Update contact details"; $("#ctSub").textContent=p.name+" · individual"; $("#ctEmail").value=""; $("#ctPhone").value=""; $("#ctAddressWrap").style.display="none"; $("#ctSave").textContent="Update contact details"; openSheet("#sheetContact"); }
-function openContactBusiness(){ contactMode="business"; $("#ctTitle").textContent="Update business contact"; $("#ctSub").textContent=co().name+" · business"; $("#ctEmail").value=co().bizEmail; $("#ctPhone").value=co().bizPhone; $("#ctAddress").value=co().bizAddress; $("#ctAddressWrap").style.display="block"; $("#ctSave").textContent="Update business contact"; openSheet("#sheetContact"); }
+function openContactBusiness(){ contactMode="business"; $("#ctTitle").textContent="Update business contact"; $("#ctSub").textContent=co().name+" · business"; $("#ctEmail").value=co().bizEmail; $("#ctPhone").value=co().bizPhone; $("#ctAddress").value=co().bizAddress; $("#ctAddressWrap").style.display="block"; $("#ctSave").textContent="Update"; openSheet("#sheetContact"); }
 function applyContact(){
   if(contactMode==="individual"){ const p=co().people.find(x=>x.id===currentMemberId); p.contactUpdated=true; afterEdit("Added to your changes"); }
   else {
@@ -706,22 +885,132 @@ function applyContact(){
   }
 }
 
-/* add person */
-function toggleAddUpload(){ const up=$("#addUpload"); up.classList.toggle("done"); up.innerHTML='<span class="idthumb"></span>'+(up.classList.contains("done")?"✓ Identity document attached":"＋ Attach Emirates ID or passport"); }
-function openAddMember(){ $("#addName").value=""; ["addSig","addKC","addPOA"].forEach(i=>$("#"+i).classList.remove("on")); const up=$("#addUpload"); up.classList.remove("done"); up.innerHTML='<span class="idthumb"></span>＋ Attach Emirates ID or passport'; openSheet("#sheetAdd"); }
+/* add person — 4-step wizard: role & contact -> ID docs -> OCR confirmation -> full KYC details */
+let addDraft={};
+function selectAddRole(r){
+  addDraft.role=r;
+  $("#roleCardPartner").classList.toggle("sel", r==="partner");
+  $("#roleCardPoa").classList.toggle("sel", r==="poa");
+  const isPoa=r==="poa";
+  $("#addRolesCard").style.display=isPoa?"none":"block";
+  $("#addOwnWrap").style.display=isPoa?"none":"block";
+  $("#addSig").classList.toggle("on", !isPoa);
+  $("#addPrimary").classList.toggle("on", !isPoa);
+  const ownInp=$("#addOwn");
+  if(isPoa){ ownInp.value=""; ownInp.disabled=true; ownInp.placeholder="Not applicable for POA"; }
+  else { ownInp.disabled=false; ownInp.placeholder="e.g. 25"; }
+}
+function openAddMember(){
+  addDraft={ docs:{front:false,back:false,passport:false,dual:false} };
+  $("#addName").value=""; $("#addMobile").value=""; $("#addEmail").value="";
+  $("#addOwn").value=""; $("#addOwn").disabled=false; $("#addOwn").placeholder="e.g. 25";
+  selectAddRole("partner");
+  show("addStep1");
+}
+function addStep1Continue(){
+  const name=$("#addName").value.trim();
+  if(!name){ toast("Add a full name first"); return; }
+  addDraft.name=name;
+  addDraft.role=$("#roleCardPoa").classList.contains("sel")?"poa":"partner";
+  addDraft.sig=$("#addSig").classList.contains("on");
+  addDraft.primary=$("#addPrimary").classList.contains("on");
+  addDraft.ownership=addDraft.role==="partner"?(Number($("#addOwn").value)||0):0;
+  addDraft.mobile=$("#addMobile").value.trim();
+  addDraft.email=$("#addEmail").value.trim();
+  openAddDocs();
+}
+function openAddDocs(){
+  $("#addResidentType").value="UAE Resident";
+  const map={front:"addDocFront",back:"addDocBack",passport:"addDocPassport",dual:"addDocDual"};
+  Object.keys(map).forEach(k=>{ addDraft.docs[k]=false; const el=$("#"+map[k]); el.classList.remove("done"); el.innerHTML='<span class="idthumb"></span>＋ Tap to upload'; });
+  updateAddDocsBtn();
+  show("addStep2");
+}
+function toggleAddDoc(k){
+  const map={front:"addDocFront",back:"addDocBack",passport:"addDocPassport",dual:"addDocDual"};
+  const el=$("#"+map[k]);
+  addDraft.docs[k]=!addDraft.docs[k];
+  el.classList.toggle("done", addDraft.docs[k]);
+  el.innerHTML='<span class="idthumb"></span>'+(addDraft.docs[k]?"✓ Uploaded":"＋ Tap to upload");
+  updateAddDocsBtn();
+}
+function updateAddDocsBtn(){ const d=addDraft.docs; $("#addDocsBtn").disabled=!((d.front&&d.back)||d.passport); }
+function addDocsContinue(){
+  addDraft.residentType=$("#addResidentType").value;
+  const btn=$("#addDocsBtn"); btn.disabled=true; btn.textContent="Processing…";
+  setTimeout(()=>{ btn.textContent="Continue"; updateAddDocsBtn(); openAddConfirm(); }, 1500);
+}
+function openAddConfirm(){
+  addDraft.firstName="Zaria"; addDraft.lastName="Hamdy";
+  addDraft.eidNumber="784-"+(1000+addSeq)+"-"+(1000000+addSeq)+"-"+(addSeq%10);
+  addDraft.eidExpiry="12 March 2027";
+  addDraft.eidCardNo=addDraft.lastName;
+  addDraft.dob="12 March 1990";
+  addDraft.nationality="United Kingdom";
+  addDraft.mobileExtracted="50 732 7835";
+  addDraft.emailExtracted="zaria.hamdy@gmail.com";
+  $("#cfEidNumber").value=addDraft.eidNumber;
+  $("#cfEidExpiry").value=addDraft.eidExpiry;
+  $("#cfEidCardNo").value=addDraft.eidCardNo;
+  $("#cfDob").value=addDraft.dob;
+  $("#cfNationality").value=addDraft.nationality;
+  setCfGender("Female");
+  show("addStep3");
+}
+function setCfGender(g){ addDraft.gender=g; $("#cfGenderM").classList.toggle("on", g==="Male"); $("#cfGenderF").classList.toggle("on", g==="Female"); }
+function addConfirmContinue(){
+  addDraft.eidNumber=$("#cfEidNumber").value.trim();
+  addDraft.eidExpiry=$("#cfEidExpiry").value.trim();
+  addDraft.eidCardNo=$("#cfEidCardNo").value.trim();
+  addDraft.dob=$("#cfDob").value.trim();
+  addDraft.nationality=$("#cfNationality").value;
+  openAddDetails();
+}
+function openAddDetails(){
+  $("#dtAssociation").value = addDraft.role==="poa" ? "Power of Attorney" : (addDraft.sig?"Authorised Signatory":(addDraft.primary?"Primary Person":"Partner / Shareholder / UBO"));
+  $("#dtFirstName").value=addDraft.firstName||"";
+  $("#dtLastName").value=addDraft.lastName||"";
+  $("#dtTitle").value="";
+  $("#dtMother").value="";
+  $("#dtNationality").value=addDraft.nationality||"United Kingdom";
+  setDtGender(addDraft.gender||"Female");
+  $("#dtCountryBirth").value=addDraft.nationality||"United Kingdom";
+  const passportOk=!!addDraft.docs.passport;
+  if(passportOk && !addDraft.passportNo){ addDraft.passportNo=String(100000000+addSeq); addDraft.passportExpiry="18 September 2029"; }
+  $("#dtPassportNo").value=passportOk?addDraft.passportNo:"";
+  $("#dtPassportExpiry").value=passportOk?addDraft.passportExpiry:"";
+  $("#dtDob").value=addDraft.dob||"";
+  $("#dtEidNumber").value=addDraft.eidNumber||"";
+  $("#dtEidExpiry").value=addDraft.eidExpiry||"";
+  $("#dtDesignation").value="";
+  $("#dtOwnership").value=addDraft.ownership||0;
+  $("#dtBuildingNo").value=""; $("#dtBuildingName").value=""; $("#dtStreet").value=""; $("#dtPoBox").value="";
+  $("#dtCountry").value="United Arab Emirates"; $("#dtCityEmirate").value="Abu Dhabi";
+  $("#dtMobile").value=addDraft.mobileExtracted||addDraft.mobile||""; $("#dtOfficeTel").value=""; $("#dtHomeTel").value="";
+  $("#dtEmail").value=addDraft.emailExtracted||addDraft.email||"";
+  setDtPep(false);
+  show("addStep4");
+}
+function setDtGender(g){ addDraft.gender=g; $("#dtGenderM").classList.toggle("on", g==="Male"); $("#dtGenderF").classList.toggle("on", g==="Female"); }
+function setDtPep(v){ addDraft.pep=v; $("#dtPepY").classList.toggle("on", v===true); $("#dtPepN").classList.toggle("on", v===false); }
 function applyAdd(){
-  const name=$("#addName").value.trim(); if(!name){ toast("Add a name first"); return; }
-  const sig=$("#addSig").classList.contains("on"), kc=$("#addKC").classList.contains("on"), poa=$("#addPOA").classList.contains("on");
-  if(!sig&&!kc&&!poa){ toast("Pick at least one role"); return; }
-  const docOk=$("#addUpload").classList.contains("done");
+  const firstName=$("#dtFirstName").value.trim()||addDraft.firstName||addDraft.name;
+  const lastName=$("#dtLastName").value.trim()||addDraft.lastName||"";
+  const name=(firstName+" "+lastName).trim()||addDraft.name;
+  const ownership=addDraft.role==="poa"?0:(Number($("#dtOwnership").value)||0);
+  const docsAttached=[];
+  if(addDraft.docs.front&&addDraft.docs.back) docsAttached.push("Emirates ID");
+  if(addDraft.docs.passport) docsAttached.push("Passport");
+  if(addDraft.docs.dual) docsAttached.push("Dual Nationality Passport");
   addSeq++;
-  co().people.push({ id:"n"+addSeq, name, ownership:0, origOwn:0, sig, keyContact:kc, poa, origSig:false, origKC:false, origPOA:false, doc:"new", docUpdated:false, docType:null, contactUpdated:false, status:"new", docProvided:docOk });
+  co().people.push({ id:"n"+addSeq, name, ownership, origOwn:0, sig:addDraft.sig, keyContact:addDraft.primary, poa:addDraft.role==="poa", origSig:false, origKC:false, origPOA:false, doc:"new", docUpdated:false, docType:docsAttached.join(" + ")||null, contactUpdated:false, status:"new", docProvided:docsAttached.length>0 });
+  show("workspace");
   afterEdit("Added to your changes");
 }
 
 /* trade licence update flow (no allocation) */
 function toggleLicence(){
-  if(co().licenceReplacing){ co().licenceReplacing=false; co().pendingLicenceNo=null; co().pendingLicenceExpiry=null; renderWorkspace(); toast("Removed from your changes"); }
+  if(co().licenceReplacing){ co().licenceReplacing=false; co().pendingLicenceNo=null; co().pendingLicenceExpiry=null; co().pendingLicenceVerified=null; renderWorkspace(); toast("Removed from your changes"); }
   else openLicence();
 }
 function toggleLicUpload(){
@@ -729,29 +1018,52 @@ function toggleLicUpload(){
   const done=up.classList.contains("done");
   up.innerHTML='<span class="idthumb"></span>'+(done?"✓ Trade licence attached":"＋ Upload trade licence");
   if(done){
-    $("#licNoExtract").textContent=co().licence;
-    $("#licExpiryExtract").textContent=bumpYear((co().licenceExpiry||"").replace("Expires ",""));
-    $("#licDetails").style.display="block"; $("#licHint").style.display="none";
+    $("#licDetails").style.display="none"; $("#licOcr").style.display="block";
+    setTimeout(()=>{
+      if(!$("#licUpload").classList.contains("done")) return;
+      const parts=(co().licence||"").split(" · "); const prefix=parts[0], number=parts[1]||parts[0];
+      $("#licNoInput").value=number;
+      $("#licAuthInput").value=[...document.querySelectorAll("#licAuthInput option")].some(o=>o.value===prefix)?prefix:"DED";
+      $("#licExpiryInput").value=bumpYear((co().licenceExpiry||"").replace("Expires ",""));
+      $("#licOcr").style.display="none"; $("#licDetails").style.display="block";
+      updateLicSaveState();
+    }, 1600);
   } else {
-    $("#licNoExtract").textContent="—"; $("#licExpiryExtract").textContent="—";
-    $("#licDetails").style.display="none"; $("#licHint").style.display="block";
+    $("#licNoInput").value=""; $("#licExpiryInput").value="";
+    $("#licOcr").style.display="none"; $("#licDetails").style.display="none";
   }
-  $("#licSave").disabled=!done;
+  updateLicSaveState();
+}
+function updateLicSaveState(){
+  const ready=$("#licDetails").style.display==="block", consent=$("#licConsent").classList.contains("on");
+  $("#licSave").disabled=!(ready&&consent);
 }
 function bumpYear(str){ return (str||"").replace(/(\d{4})/, m=>String(parseInt(m,10)+1)); }
 function openLicence(){
   $("#licSub").textContent=co().name+" · replace the licence document on file";
   const up=$("#licUpload"); up.classList.remove("done"); up.innerHTML='<span class="idthumb"></span>＋ Upload trade licence';
-  $("#licDetails").style.display="none"; $("#licHint").style.display="block";
-  $("#licNoExtract").textContent="—"; $("#licExpiryExtract").textContent="—";
-  $("#licSave").disabled=true;
+  $("#licOcr").style.display="none"; $("#licDetails").style.display="none";
+  $("#licNoInput").value=""; $("#licAuthInput").value="DED"; $("#licExpiryInput").value="";
+  $("#licConsent").classList.add("on");
+  updateLicSaveState();
   openSheet("#sheetLicence");
 }
-function applyLicence(){
+function continueLicence(){
+  const consent=$("#licConsent").classList.contains("on");
+  if(consent) beginLicenceVerification(); else applyLicence(false);
+}
+let licenceVerifying=false;
+function beginLicenceVerification(){
+  licenceVerifying=true;
+  openSheet("#sheetLicenceVerify");
+  setTimeout(()=>{ licenceVerifying=false; applyLicence(true); }, 1800);
+}
+function applyLicence(verified){
   co().licenceReplacing=true;
-  co().pendingLicenceNo = $("#licNoExtract").textContent;
-  co().pendingLicenceExpiry = "Expires "+$("#licExpiryExtract").textContent;
-  afterEdit("Added to your changes");
+  co().pendingLicenceNo = $("#licAuthInput").value+" · "+$("#licNoInput").value.trim();
+  co().pendingLicenceExpiry = "Expires "+$("#licExpiryInput").value.trim();
+  co().pendingLicenceVerified = verified;
+  afterEdit(verified?"Licence verified · added to your changes":"Added to your changes");
 }
 
 /* review */
@@ -771,18 +1083,20 @@ function reqForChange(k){
 function buildChangeSet(){
   const set=[];
   if(co().licenceReplacing){
-    set.push({ title:"Update trade licence", detail:(co().pendingLicenceNo||"")+" · "+(co().pendingLicenceExpiry||"").replace("Expires ","expires "), requests:[{name:"Trade License Update",sla:"instant"}], docNeeded:true, docOk:true, warnings:["New licence document will be verified on file."] });
+    const verified=co().pendingLicenceVerified;
+    set.push({ title:"Update trade licence", detail:(co().pendingLicenceNo||"")+" · "+(co().pendingLicenceExpiry||"").replace("Expires ","expires "), requests:[{name:"Trade License Update",sla:verified?"instant":"review"}], docNeeded:true, docOk:true, warnings:[verified?"Company details verified directly with the issuing authority.":"Licence document was not verified with the issuing authority — may require manual review."] });
   }
   if(co().bizContactUpdated) set.push({ title:"Update business contact", detail:"Email, mobile & business address", requests:[{name:"Update Contact Details / Email — Business",sla:"review"}], docNeeded:false, docOk:true, warnings:[] });
   co().people.forEach(p=>{
     const ch=personChanges(p); if(!ch.length) return;
     if(p.status==="new"){
       const reqs=[];
+      if(p.ownership>0) reqs.push({name:"Ownership Update",sla:"review"});
       if(p.sig) reqs.push({name:"Authorised Signatory Addition",sla:"review"});
       if(p.keyContact) reqs.push({name:"Key Contact Person Addition",sla:"review"});
       if(p.poa) reqs.push({name:"Power of Attorney Addition",sla:"review"});
       reqs.push({name:"ID Documents Update",sla:"review"});
-      const roles=[p.sig?"signatory":null,p.keyContact?"key contact":null,p.poa?"POA":null].filter(Boolean).join(" · ");
+      const roles=[p.ownership>0?(p.ownership+"% owner"):null,p.sig?"signatory":null,p.keyContact?"key contact":null,p.poa?"POA":null].filter(Boolean).join(" · ");
       set.push({ title:"Add "+p.name, detail:roles, requests:reqs, docNeeded:true, docOk:!!p.docProvided, warnings:[] });
       return;
     }
@@ -813,7 +1127,6 @@ function renderReview(){
   $("#sumChanges").textContent=set.length;
   const docsOk=set.every(c=>!(c.docNeeded&&!c.docOk));
   const blockers=[];
-  if(totalOwn()!==100) blockers.push("Shareholding totals "+totalOwn()+"% — all shareholders must total 100%.");
   if(!docsOk) blockers.push("One or more added people still need an ID document.");
   if(sigCount()===0) blockers.push("The business must keep at least one authorised signatory.");
   if(kcCount()===0) blockers.push("The business must keep at least one key contact person.");
@@ -885,32 +1198,23 @@ function commitChanges(){
   if(c.licenceReplacing){
     if(c.pendingLicenceNo) c.licence=c.pendingLicenceNo;
     if(c.pendingLicenceExpiry) c.licenceExpiry=c.pendingLicenceExpiry;
-    c.licenceReplacing=false; c.pendingLicenceNo=null; c.pendingLicenceExpiry=null;
+    c.licenceReplacing=false; c.pendingLicenceNo=null; c.pendingLicenceExpiry=null; c.pendingLicenceVerified=null;
   }
   c.bizContactUpdated=false;
   c.people.forEach(p=>{ p.status="existing"; p.origOwn=p.ownership; p.origSig=p.sig; p.origKC=p.keyContact; p.origPOA=p.poa; p.docUpdated=false; p.docType=null; p.contactUpdated=false; p.doc="verified"; delete p.docProvided; });
 }
 function submitAll(){
   const {set}=renderReview();
-  const children=[];
-  set.forEach(c=>c.requests.forEach(r=>children.push({name:r.name, ctx:c.title.replace(/^(Add|Remove|Update)\s/,""), sla:r.sla})));
-  const cl=$("#childList"); cl.innerHTML=""; let doneCount=0;
-  children.forEach((r,i)=>{
-    let cls,txt;
-    if(r.sla==="instant"){ cls="done"; txt="Completed"; doneCount++; }
-    else { cls="review"; txt="In progress"; }
-    const row=document.createElement("div"); row.className="child";
-    row.innerHTML='<div class="cname">'+r.name+'<small>'+r.ctx+'</small></div><span class="cstat"><span class="stat '+cls+'">'+txt+'</span></span>';
-    cl.appendChild(row);
-  });
-  const pct=children.length?Math.round(doneCount/children.length*100):0;
-  $("#bundleProg").style.width=pct+"%";
-  $("#bundleProgNote").textContent=doneCount+" of "+children.length+" requests complete";
-  $("#doneSummary").textContent=children.length+" requests created from "+set.length+" change"+(set.length>1?"s":"");
+  const allSlas=set.flatMap(c=>c.requests.map(r=>r.sla));
+  const allInstant=allSlas.length>0 && allSlas.every(sla=>sla==="instant");
+  $("#bundleStat").className="stat "+(allInstant?"done":"review");
+  $("#bundleStat").textContent=allInstant?"Completed":"In progress";
+  $("#bundleProgNote").textContent=allInstant?"All changes are reflected on your structure.":"We'll notify you once everything has been reviewed.";
+  $("#doneSummary").textContent=allInstant?"Your structure update is complete.":"Your structure update has been submitted and is now in progress.";
   const ref="ORG-2025-0"+(142+submittedBundles.length);
   $("#bundleRef").textContent="Ref "+ref+" · 16 Jul 2025";
-  submittedBundles.unshift({ title:"Structure update", ref, date:"16 Jul 2025", status:"In Progress" });
-  commitChanges(); renderLandingRequests(); show("tracker"); toast("Submitted · tracked as one bundle");
+  submittedBundles.unshift({ title:"Structure update", ref, date:"16 Jul 2025", status:allInstant?"Completed":"In Progress" });
+  commitChanges(); renderLandingRequests(); show("tracker"); toast("Submitted · tracked as one request");
 }
 
 /* reset */
