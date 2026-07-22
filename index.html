@@ -139,6 +139,11 @@
   .decl-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--line-2);flex:0 0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;color:transparent;margin-top:1px;font-size:12px;font-weight:700;}
   .decl-check.on{background:var(--ink);border-color:var(--ink);color:#fff;}
   .decl-text{font-size:11.5px;color:var(--ink-2);line-height:1.6;}
+  .tc-item{display:flex;gap:10px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line);}
+  .tc-item:first-child{border-top:none;padding-top:0;}
+  .tc-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line-2);flex:0 0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;color:transparent;margin-top:1px;font-size:12px;font-weight:700;}
+  .tc-check.on{border-color:var(--ink);color:var(--ink);}
+  .tc-text{font-size:12px;color:var(--ink-2);line-height:1.6;}
   .review-sum-card{cursor:pointer;}
   .review-sum-card:hover{border-color:var(--line-strong);}
   .review-sum-card .rs-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
@@ -146,12 +151,6 @@
   .review-sum-card .rs-field{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-top:1px solid var(--line);}
   .review-sum-card .rs-label{flex:0 0 42%;font-size:12px;font-weight:600;color:var(--ink-2);line-height:1.4;}
   .review-sum-card .rs-value{flex:1;font-size:13.5px;color:var(--ink);word-break:break-word;}
-  .cap-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);}
-  .cap-row:first-child{border-top:none;}
-  .cap-ico{width:34px;height:34px;border-radius:50%;background:var(--fill);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2);flex:0 0 auto;}
-  .cap-ico svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-  .cap-title{font-size:14px;font-weight:550;color:var(--ink);}
-  .cap-sub{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-top:2px;}
   .star-rating{display:flex;gap:6px;}
   .star-btn{background:none;border:none;padding:0;font-size:30px;line-height:1;color:var(--line-2);cursor:pointer;}
   .star-btn.on{color:var(--ink);}
@@ -357,11 +356,11 @@
         <div class="svc-card" onclick="enterWorkspace()">
           <div class="sico">⚏</div><div><div class="st2">Structure Update</div><div class="sd">Signatories, ownership, documents &amp; contact details</div></div><div class="chev">›</div>
         </div>
+        <div class="svc-card" onclick="toast('Opens the Trade License Update flow')">
+          <div class="sico">TL</div><div><div class="st2">Trade License Update</div><div class="sd">Renew or replace your registered trade licence</div></div><div class="chev">›</div>
+        </div>
         <div class="svc-card" onclick="toast('Opens the FATCA Update flow')">
           <div class="sico">▤</div><div><div class="st2">FATCA Update</div><div class="sd">Update FATCA/CRS tax classification</div></div><div class="chev">›</div>
-        </div>
-        <div class="svc-card" onclick="toast('Opens the Add Sub Company flow')">
-          <div class="sico">＋</div><div><div class="st2">Add Sub Company</div><div class="sd">Register a new subsidiary or branch</div></div><div class="chev">›</div>
         </div>
         <div class="svc-card" onclick="toast('Opens the Company Name Change flow')">
           <div class="sico">Aa</div><div><div class="st2">Company Name Change</div><div class="sd">Update your registered company name</div></div><div class="chev">›</div>
@@ -381,17 +380,6 @@
           <div><div class="field-label">Registered company</div><div class="field-value" id="wsCompanyName">Yalla LLC</div></div>
           <div class="cs-chev">▾</div>
         </button>
-        <div class="card" id="licenceCard">
-          <div class="row-between">
-            <div style="display:flex;gap:12px;align-items:center;">
-              <div class="doc-thumb"></div>
-              <div><div class="field-label">Trade licence</div>
-                <div class="field-value" style="font-size:14px;" id="licenceNo">DED · CN-1938472</div>
-                <div class="mini" id="licenceMeta">Expires 14 Mar 2026</div></div>
-            </div>
-            <div id="licenceActions"><button class="linkbtn" onclick="toggleLicence()">Update</button></div>
-          </div>
-        </div>
         <div class="card" id="bizContactCard">
           <div class="row-between">
             <div><div class="field-label">Business contact</div>
@@ -513,6 +501,17 @@
       <div class="scroll" style="padding-bottom:110px;">
         <div class="stepbar"><span class="stepfrac" id="s3Frac">3 / 6</span><div class="steptrack"><div class="stepfill" id="s3Fill" style="width:50%;"></div></div></div>
 
+        <div class="card" id="partnerRolesCard" style="display:none;">
+          <div class="toggle-row" style="border-top:none;">
+            <div class="lbl">This person is an Authorised Signatory<small>Can sign and approve transactions</small></div>
+            <div class="switch on" id="dtPartnerSig" onclick="togglePartnerSig()"><div class="knob"></div></div>
+          </div>
+          <div class="toggle-row">
+            <div class="lbl">This person is a Key Contact Person<small>Main contact and decision maker</small></div>
+            <div class="switch on" id="dtPartnerKcp" onclick="togglePartnerKcp()"><div class="knob"></div></div>
+          </div>
+        </div>
+
         <div class="card" id="acctAccessCard">
           <div style="font-weight:650;font-size:14px;margin-bottom:11px;">Account Access</div>
           <button class="company-switch" style="margin-bottom:0;" onclick="openAccountAccess()">
@@ -536,9 +535,6 @@
         <div class="field-label">Passport Expiry Date</div><input class="inp" id="dtPassportExpiry" autocomplete="off">
         <div class="field-label">Emirates ID</div><input class="inp" id="dtEidNumber" autocomplete="off">
         <div class="field-label">Emirates ID Expiry Date</div><input class="inp" id="dtEidExpiry" autocomplete="off">
-        <div id="fldDesignation" style="display:none;">
-          <div class="field-label">Designation</div><input class="inp" id="dtDesignation" autocomplete="off">
-        </div>
 
         <div id="addressSection">
           <div class="sec">Address to get in touch</div>
@@ -557,23 +553,6 @@
         <div class="field-label">Email Address</div><input class="inp" id="dtEmail" autocomplete="off">
         <div class="field-label">Mobile Number</div>
         <div class="phone-row"><div class="cc">🇦🇪 +971</div><input class="inp" id="dtMobile" autocomplete="off"></div>
-
-        <div class="card" id="channelMgmtCard">
-          <div style="font-weight:650;font-size:14px;margin-bottom:11px;">Channel Management</div>
-          <div id="channelMgmtToggleMode">
-            <div class="toggle-row" style="border-top:none;">
-              <div class="lbl">Channel Management access<small>Give this person access to Channel Management</small></div>
-              <div style="display:flex;align-items:center;gap:10px;flex:0 0 auto;">
-                <button class="doc-icon-btn" style="border:none;width:26px;height:26px;" onclick="openSheet('#sheetChannelInfo')" title="What does this include?"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5v.01"/></svg></button>
-                <div class="switch" id="dtChannelMgmt" onclick="this.classList.toggle('on')"><div class="knob"></div></div>
-              </div>
-            </div>
-          </div>
-          <div id="channelMgmtAdminMode" style="display:none;">
-            <p class="mini" style="margin:0 0 14px;color:var(--ink);">This user will have Super Administrator access rights to your FAB Business platform.</p>
-            <div class="card" id="adminChannelCapList" style="padding:2px 14px;margin:0;"></div>
-          </div>
-        </div>
       </div>
       <div class="stickybar">
         <div class="dual">
@@ -596,8 +575,12 @@
           <div id="fatcaQList"></div>
         </div>
 
-        <div class="sec">Declarations</div>
-        <div class="card" id="declList"></div>
+        <div class="card">
+          <div class="decl-item" id="ackRow" style="cursor:pointer;" onclick="openTerms()">
+            <div class="decl-check" id="ackCheck">✓</div>
+            <div class="decl-text">I acknowledge that I have read and understood the FAB Business Banking <b>Terms and conditions</b> and any applicable specific condition in connection.</div>
+          </div>
+        </div>
       </div>
       <div class="stickybar">
         <div class="dual">
@@ -669,6 +652,11 @@
     <div class="sheet" id="sheetAddRole">
       <div class="grab"></div><h2>New Individual</h2>
       <div style="font-weight:650;font-size:14px;margin:2px 0 11px;">Role in the Company</div>
+      <div class="role-card" id="roleCardPartner" onclick="selectAddRole('partner')">
+        <div class="rico">▣</div>
+        <div class="rtxt"><b>Partner / Shareholder / UBO</b><small>Individual with ownership or beneficial interest</small></div>
+        <div class="rmark">✓</div>
+      </div>
       <div class="role-card" id="roleCardSig" onclick="selectAddRole('sig')">
         <div class="rico">✎</div>
         <div class="rtxt"><b>Authorized Signatory</b><small>Can sign and approve transactions</small></div>
@@ -679,14 +667,9 @@
         <div class="rtxt"><b>Key Contact Person</b><small>Bank's main point of contact</small></div>
         <div class="rmark">✓</div>
       </div>
-      <div class="role-card" id="roleCardPoa" onclick="selectAddRole('poa')">
+      <div class="role-card" id="roleCardPoa" onclick="selectAddRole('poa')" style="margin-bottom:16px;">
         <div class="rico">§</div>
         <div class="rtxt"><b>Power of Attorney</b><small>Acts on the company's behalf</small></div>
-        <div class="rmark">✓</div>
-      </div>
-      <div class="role-card" id="roleCardAdmin" onclick="selectAddRole('admin')" style="margin-bottom:16px;">
-        <div class="rico">⚙</div>
-        <div class="rtxt"><b>New Admin</b><small>Manages users and platform access</small></div>
         <div class="rmark">✓</div>
       </div>
       <div class="dual">
@@ -695,18 +678,13 @@
       </div>
     </div>
 
-    <div class="sheet" id="sheetChannelInfo">
-      <div class="grab"></div><h2>Admin Access</h2>
-      <p class="subh">This person will have full administrator access with the following capabilities:</p>
-      <div class="card" id="sheetChannelCapList" style="padding:2px 14px;"></div>
-      <button class="sheet-ghost" onclick="closeSheet()">Close</button>
-    </div>
 
     <div class="sheet" id="sheetMember">
       <div class="grab"></div><h2 id="smName">Member</h2><p class="subh" id="smMeta">—</p>
       <div class="sheet-error" id="smError"></div>
       <div id="smActions"></div><button class="sheet-ghost" onclick="closeSheet()">Close</button>
     </div>
+
 
     <div class="sheet" id="sheetConfirm">
       <div class="grab"></div><h2 id="cfTitle">Remove?</h2><p class="subh" id="cfBody">—</p>
@@ -720,44 +698,6 @@
       <div class="warnrow" id="soUboNote" style="margin-bottom:14px;"></div>
       <button class="sheet-primary" onclick="applyOwn()">Save ownership</button>
       <button class="sheet-ghost" onclick="openMemberSheet(currentMemberId)">Back</button>
-    </div>
-
-    <div class="sheet" id="sheetLicence">
-      <div class="grab"></div><h2>Update trade licence</h2><p class="subh" id="licSub">—</p>
-      <div class="field-label">New trade licence document</div>
-      <div class="upload-box" id="licUpload" onclick="toggleLicUpload()"><span class="idthumb"></span>＋ Upload trade licence</div>
-      <div class="mini" id="licOcr" style="display:none;margin-bottom:12px;">Reading document…</div>
-      <div id="licDetails" style="display:none;">
-        <p class="mini" style="margin:0 0 14px;">Please review the extracted trade licence details. For any changes, please update them.</p>
-        <div class="field-label">Trade licence number</div>
-        <input class="inp" id="licNoInput" autocomplete="off">
-        <div class="field-label">Issuing authority</div>
-        <select class="inp" id="licAuthInput">
-          <option value="DED">Dubai DED</option>
-          <option value="DET">Abu Dhabi DET</option>
-          <option value="IFZA">IFZA</option>
-          <option value="DMCC">DMCC</option>
-          <option value="FZ">Other free zone</option>
-        </select>
-        <div class="field-label">Expiry date</div>
-        <input class="inp" id="licExpiryInput" autocomplete="off">
-        <div class="toggle-row" style="align-items:flex-start;">
-          <div class="lbl">I consent to FAB validating company details from the issuing authority<small>Recommended — confirms your licence details directly with the issuing authority</small></div>
-          <div class="switch on" id="licConsent" onclick="this.classList.toggle('on'); updateLicSaveState();"><div class="knob"></div></div>
-        </div>
-      </div>
-      <button class="sheet-primary" id="licSave" disabled onclick="continueLicence()">Continue</button>
-      <button class="sheet-ghost" onclick="closeSheet()">Cancel</button>
-    </div>
-
-    <div class="sheet" id="sheetLicenceVerify">
-      <div class="grab"></div>
-      <div class="verify-hero">
-        <div class="spinner"></div>
-        <h2>Please wait a moment…</h2>
-        <p>Validating your company information from the issuing authority.</p>
-        <p>Do not close the app, please.</p>
-      </div>
     </div>
 
     <div class="sheet" id="sheetId">
@@ -777,9 +717,14 @@
         <div class="field-label">Business address</div><input class="inp" id="ctAddress" autocomplete="off">
       </div>
       <button class="sheet-primary" id="ctSave" onclick="applyContact()">Update contact details</button>
-      <button class="sheet-ghost" onclick="closeSheet()">Cancel</button>
+      <button class="sheet-ghost" onclick="ctBack()">Back</button>
     </div>
 
+    <div class="sheet" id="sheetTerms">
+      <div class="grab"></div><h2>Terms &amp; Conditions</h2>
+      <div id="tcList"></div>
+      <button class="sheet-primary" id="tcAccept" disabled onclick="acceptTerms()">Accept</button>
+    </div>
 
     <div class="toast" id="toast"></div>
   </div>
@@ -791,7 +736,7 @@
 "use strict";
 
 const companies = {
-  c1:{ id:"c1", name:"Yalla LLC", licence:"DED · CN-1938472", licenceExpiry:"Expires 14 Mar 2029", licenceReplacing:false,
+  c1:{ id:"c1", name:"Yalla LLC", licence:"DED · CN-1938472", licenceExpiry:"Expires 14 Mar 2029",
     bizEmail:"finance@yalla.ae", bizPhone:"+971 4 555 0100", bizAddress:"Office 1203, Burj Al Salam, Sheikh Zayed Rd, Dubai", bizContactUpdated:false,
     accounts:[
       { id:"acc1", name:"FAB Business Advantage Account", mask:"•••1234" },
@@ -804,7 +749,7 @@ const companies = {
       { id:"m3", name:"Khadija Al Shamsi", ownership:10, origOwn:10, sig:true,  keyContact:false, poa:false, origSig:true,  origKC:false, origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" },
       { id:"m4", name:"Omar Farouk", ownership:0, origOwn:0, sig:false, keyContact:true, poa:true, origSig:false, origKC:true, origPOA:true, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" }
     ]},
-  c2:{ id:"c2", name:"Al Noor Trading LLC", licence:"DED · CN-2077431", licenceExpiry:"Expires 09 Sep 2029", licenceReplacing:false,
+  c2:{ id:"c2", name:"Al Noor Trading LLC", licence:"DED · CN-2077431", licenceExpiry:"Expires 09 Sep 2029",
     bizEmail:"accounts@alnoor.ae", bizPhone:"+971 4 555 0200", bizAddress:"Warehouse 7, Al Quoz Industrial 3, Dubai", bizContactUpdated:false,
     accounts:[
       { id:"acc1", name:"FAB Business Advantage Account", mask:"•••2201" },
@@ -816,7 +761,7 @@ const companies = {
       { id:"a2", name:"Rajesh Menon", ownership:0,   origOwn:0,   sig:false, keyContact:false,  poa:true, origSig:false, origKC:false,  origPOA:true, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" },
       { id:"a3", name:"Sara Al Noor",   ownership:10,  origOwn:10,  sig:true,  keyContact:true,  poa:false, origSig:true,  origKC:true,  origPOA:false, doc:"verified", docUpdated:false, docType:null, contactUpdated:false, status:"existing" }
     ]},
-  c3:{ id:"c3", name:"Marina Bay Logistics FZ-LLC", licence:"IFZA · 12345-01", licenceExpiry:"Expires 21 Jan 2030", licenceReplacing:false,
+  c3:{ id:"c3", name:"Marina Bay Logistics FZ-LLC", licence:"IFZA · 12345-01", licenceExpiry:"Expires 21 Jan 2030",
     bizEmail:"ops@marinabay.ae", bizPhone:"+971 4 555 0300", bizAddress:"Unit 22, IFZA Business Park, Dubai Silicon Oasis", bizContactUpdated:false,
     accounts:[
       { id:"acc1", name:"FAB Business Advantage Account", mask:"•••3301" },
@@ -864,7 +809,6 @@ function personChanges(p){
 }
 function countStagedChanges(){
   let n=0;
-  if(co().licenceReplacing) n++;
   if(co().bizContactUpdated) n++;
   co().people.forEach(p=>{ if(personChanges(p).length) n++; });
   return n;
@@ -885,7 +829,6 @@ function memberChips(p){
   if(p.sig) out.push(chip("AUTH SIGNATORY","role"));
   if(p.keyContact) out.push(chip("KCP","role"));
   if(p.poa) out.push(chip("POA","role"));
-  if(p.admin) out.push(chip("ADMIN","role"));
   personChanges(p).forEach(k=>{
     if(k==="new") out.push(chip("NEW","add"));
     else if(k==="own") out.push(chip("OWNERSHIP EDITED","add"));
@@ -917,21 +860,6 @@ function renderWorkspace(){
   $("#wsCompanyName").textContent=co().name;
   $("#nodeCompanyName").textContent=co().name;
   $("#nodeCompanyMeta").textContent=co().people.length+" people · "+sigCount()+" signatory"+(sigCount()===1?"":"ies")+" · "+kcCount()+" key contact"+(kcCount()===1?"":"s");
-  if(co().licenceReplacing){
-    $("#licenceNo").textContent=co().pendingLicenceNo||co().licence;
-    $("#licenceMeta").textContent="New licence · pending review";
-    $("#licenceCard").style.borderStyle="dashed";
-    $("#licenceActions").innerHTML='<div class="doc-icon-actions">'+
-      '<button class="doc-icon-btn" onclick="toast(\'Previewing new trade licence\')" title="View">'+ICON_EYE+'</button>'+
-      '<button class="doc-icon-btn" onclick="openLicence()" title="Replace">'+ICON_RELOAD+'</button>'+
-      '<button class="doc-icon-btn" onclick="toggleLicence()" title="Delete">'+ICON_TRASH+'</button>'+
-    '</div>';
-  } else {
-    $("#licenceNo").textContent=co().licence;
-    $("#licenceMeta").textContent=co().licenceExpiry;
-    $("#licenceCard").style.borderStyle="solid";
-    $("#licenceActions").innerHTML='<button class="linkbtn" onclick="toggleLicence()">Update</button>';
-  }
   $("#bizEmail").textContent=co().bizEmail;
   $("#bizPhone").textContent=co().bizPhone;
   $("#bizAddress").textContent=co().bizAddress;
@@ -948,14 +876,14 @@ function renderWorkspace(){
 
 /* sheets */
 function openSheet(id){ $("#scrim").classList.add("open"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open")); $(id).classList.add("open"); }
-function closeSheet(){ if(licenceVerifying) return; $("#scrim").classList.remove("open"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open")); }
+function closeSheet(){ $("#scrim").classList.remove("open"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("open")); }
 
 /* company switcher */
 function openCompanySwitch(){
   const wrap=$("#companyOptions"); wrap.innerHTML="";
   Object.values(companies).forEach(c=>{
     const b=document.createElement("button"); b.className="act"+(c.id===activeCompanyId?" active-co":"");
-    let pending=(c.licenceReplacing?1:0)+(c.bizContactUpdated?1:0)+c.people.filter(p=>personChanges(p).length).length;
+    let pending=(c.bizContactUpdated?1:0)+c.people.filter(p=>personChanges(p).length).length;
     b.innerHTML='<div class="ico">▣</div><div class="txt">'+c.name+'<small>'+c.licence+(pending?' · '+pending+' pending change'+(pending>1?'s':''):'')+'</small></div>'+(c.id===activeCompanyId?'<div class="chev">✓</div>':'<div class="chev">›</div>');
     b.onclick=()=>selectCompany(c.id); wrap.appendChild(b);
   });
@@ -979,26 +907,22 @@ function openMemberSheet(id){
     return;
   }
   wrap.appendChild(actionBtn("％","Change ownership", p.ownership+"% today",()=>openOwn(id)));
-  const sigAddBlocked = !p.sig && (p.poa || !(p.ownership>0));
-  if(p.sig || !sigAddBlocked){
-    wrap.appendChild(actionBtn("✎", p.sig?"Remove authorised signatory":"Add as authorised signatory", p.sig?"Currently a signatory":"Not a signatory", ()=>toggleSig(p)));
-  }
-  wrap.appendChild(actionBtn("☏", p.keyContact?"Remove key contact person":"Add as key contact person", p.keyContact?"Currently a key contact":"Not a key contact", ()=>toggleKC(p)));
-  const poaAddBlocked = !p.poa && (p.sig || p.ownership>0 || poaCount()>=POA_MAX);
-  if(p.poa || !poaAddBlocked){
-    wrap.appendChild(actionBtn("§", p.poa?"Remove power of attorney":"Add power of attorney", p.poa?"Currently holds POA":"No POA", ()=>togglePOA(p)));
-  }
   wrap.appendChild(actionBtn("⇪","Update ID document", p.docUpdated?("New "+p.docType+" attached"):"Emirates ID or passport", ()=>openId(id)));
   wrap.appendChild(actionBtn("✉","Update contact details / email", p.contactUpdated?"Update added":"Individual email & mobile", ()=>openContactIndividual(id)));
   if(p.status==="new"){ const d=actionBtn("↺","Discard added person","Removes this un-submitted addition",()=>askConfirm("Discard "+p.name+"?","This removes the person you added. Nothing has been submitted yet.","Discard person",()=>{ co().people=co().people.filter(x=>x.id!==id); afterEdit("Removed from your changes"); })); d.classList.add("danger"); wrap.appendChild(d); }
   else {
-    const d=actionBtn("✕","Remove from structure","Removes this person entirely from the company",()=>{
-      if(p.sig && sigCount()===1){ showSmError("At least one authorised signatory is required. Add another signatory before removing this person."); return; }
-      askConfirm("Remove "+p.name+"?", "This removes them as signatory, key contact, POA and/or shareholder. Submitted as a removal request.", "Remove person", ()=>{ p.removed=true; afterEdit("Marked for removal"); });
-    });
+    const d=actionBtn("✕","Remove Individual", roleComboLabel(p), ()=>removePersonFromStructure(p));
     d.classList.add("danger"); wrap.appendChild(d);
   }
   openSheet("#sheetMember");
+}
+function roleComboLabel(p){
+  const parts=[];
+  if(p.ownership>0) parts.push("Partner/Shareholder/UBO");
+  if(p.sig) parts.push("Signatory");
+  if(p.poa) parts.push("POA");
+  if(p.keyContact) parts.push("KCP");
+  return parts.length ? "Currently a "+parts.join(" + ") : "Not currently in an active role";
 }
 function actionBtn(ico,title,sub,fn){ const b=document.createElement("button"); b.className="act"; b.innerHTML='<div class="ico">'+ico+'</div><div class="txt">'+title+'<small>'+sub+'</small></div><div class="chev">›</div>'; b.onclick=fn; return b; }
 function afterEdit(msg){ closeSheet(); renderWorkspace(); toast(msg); }
@@ -1008,32 +932,9 @@ function askConfirm(title, body, confirmLabel, fn){ $("#cfTitle").textContent=ti
 function doConfirm(){ const fn=pendingConfirmFn; pendingConfirmFn=null; closeSheet(); if(fn) fn(); }
 function cancelConfirm(){ pendingConfirmFn=null; openMemberSheet(currentMemberId); }
 
-function toggleSig(p){
-  if(p.sig){
-    if(sigCount()===1){ showSmError("At least one authorised signatory is required. Add another signatory before removing this one."); return; }
-    askConfirm("Remove authorised signatory?", p.name+" will no longer be able to approve requests and letters for the business.", "Remove signatory", ()=>{ p.sig=false; afterEdit("Added to your changes"); });
-  } else {
-    if(p.poa){ showSmError("This person holds Power of Attorney and already has signing power — they can't also be an authorised signatory. Remove POA first."); return; }
-    if(!(p.ownership>0)){ showSmError("An authorised signatory must hold a share of ownership. Set an ownership percentage before adding them as a signatory."); return; }
-    p.sig=true; afterEdit("Added to your changes");
-  }
-}
-function toggleKC(p){
-  if(p.keyContact){
-    askConfirm("Remove key contact person?", p.name+" will no longer be the bank's point of contact for the business. Submitted as a service request.", "Remove key contact", ()=>{ p.keyContact=false; afterEdit("Added to your changes"); });
-  } else {
-    p.keyContact=true; afterEdit("Added to your changes");
-  }
-}
-function togglePOA(p){
-  if(p.poa){
-    askConfirm("Remove power of attorney?", p.name+" will no longer be able to act on the company's behalf.", "Remove POA", ()=>{ p.poa=false; afterEdit("Added to your changes"); });
-  } else {
-    if(p.sig){ showSmError("This person is an authorised signatory and already has signing power — they can't also hold Power of Attorney. Remove their signatory role first."); return; }
-    if(p.ownership>0){ showSmError("A POA holder can't also hold a share of ownership. Reduce their ownership to 0% first."); return; }
-    if(poaCount()>=POA_MAX){ showSmError("Only two power of attorney holders are allowed. Remove one before adding another."); return; }
-    p.poa=true; afterEdit("Added to your changes");
-  }
+function removePersonFromStructure(p){
+  if(p.sig && sigCount()===1){ showSmError("At least one authorised signatory is required. Add another signatory before removing this person."); return; }
+  askConfirm("Remove "+p.name+"?", "This removes "+p.name+" entirely from the structure. Submitted as a removal request.", "Remove person", ()=>{ p.removed=true; afterEdit("Marked for removal"); });
 }
 
 /* ownership at individual level */
@@ -1092,16 +993,17 @@ function applyContact(){
     afterEdit("Added to your changes");
   }
 }
+function ctBack(){ if(contactMode==="individual") openMemberSheet(currentMemberId); else closeSheet(); }
 
 /* add person — 4-step wizard: role & contact -> ID docs -> OCR confirmation -> full KYC details */
 let addDraft={};
 function selectAddRole(r){
   if(r==="poa" && poaCount()>=POA_MAX){ toast("Only two power of attorney holders are allowed for this company"); return; }
   addDraft.role=r;
+  $("#roleCardPartner").classList.toggle("sel", r==="partner");
   $("#roleCardSig").classList.toggle("sel", r==="sig");
   $("#roleCardKcp").classList.toggle("sel", r==="kcp");
   $("#roleCardPoa").classList.toggle("sel", r==="poa");
-  $("#roleCardAdmin").classList.toggle("sel", r==="admin");
   $("#addStep1Btn").disabled=false;
 }
 const REQUIRED_DOCS_STANDARD=[
@@ -1125,13 +1027,18 @@ const REQUIRED_DOCS_POA=[
   {key:"poaDoc", label:"Power of Attorney Legal Document", optional:false},
   {key:"sigCard", label:"Signature Card", optional:false}
 ];
-const REQUIRED_DOCS_ADMIN=[
+const REQUIRED_DOCS_PARTNER=[
+  {key:"sigCard", label:"Signature Card", optional:false},
+  {key:"boardResolution", label:"Board Resolution", optional:false},
+  {key:"aoa", label:"Articles of Association or Memorandum of Association", optional:false},
+  {key:"tradeLicense", label:"Trade License", optional:false},
   {key:"eid", label:"Emirates ID", optional:false},
-  {key:"passport", label:"Passport", optional:false}
+  {key:"passport", label:"Passport", optional:false},
+  {key:"shareCert", label:"Share Certificate", optional:true}
 ];
-const REQUIRED_DOCS_BY_ROLE={ kcp:REQUIRED_DOCS_KCP, poa:REQUIRED_DOCS_POA, admin:REQUIRED_DOCS_ADMIN };
+const REQUIRED_DOCS_BY_ROLE={ kcp:REQUIRED_DOCS_KCP, poa:REQUIRED_DOCS_POA, partner:REQUIRED_DOCS_PARTNER };
 const currentRequiredDocs = () => REQUIRED_DOCS_BY_ROLE[addDraft.role] || REQUIRED_DOCS_STANDARD;
-const ROLE_STEP_TOTAL = { sig:5, kcp:3, poa:5, admin:3 };
+const ROLE_STEP_TOTAL = { sig:5, kcp:3, poa:5, partner:5 };
 const stepTotal = () => ROLE_STEP_TOTAL[addDraft.role] || 5;
 function setStepbar(id, current){
   const total=stepTotal();
@@ -1140,10 +1047,10 @@ function setStepbar(id, current){
 }
 function openAddMember(){
   addDraft={role:null};
+  $("#roleCardPartner").classList.remove("sel");
   $("#roleCardSig").classList.remove("sel");
   $("#roleCardKcp").classList.remove("sel");
   $("#roleCardPoa").classList.remove("sel");
-  $("#roleCardAdmin").classList.remove("sel");
   $("#addStep1Btn").disabled=true;
   openSheet("#sheetAddRole");
 }
@@ -1152,13 +1059,11 @@ function addStep1Continue(){
   closeSheet();
   addDraft.sig=addDraft.role==="sig";
   addDraft.primary=addDraft.role==="kcp";
-  addDraft.admin=addDraft.role==="admin";
   openAddDocs();
 }
 function openAddDocs(){
   addDraft.docFiles={};
   const isKcp=addDraft.role==="kcp";
-  $("#docTplCard").style.display=addDraft.role==="admin"?"none":"block";
   $("#tplFileName").textContent=isKcp?"Key_Person_Declaration_unfilled.pdf":"Signature_Card_unfilled.pdf";
   $("#tplFileHint").textContent=isKcp?"Download, sign & upload below as the Key Person Declaration":"Download, sign & upload below if you don't already have one";
   renderReqDocs();
@@ -1168,19 +1073,6 @@ function openAddDocs(){
 const ICON_EYE='<svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
 const ICON_RELOAD='<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>';
 const ICON_TRASH='<svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
-const CHANNEL_CAP_ROWS=
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg></div><div><div class="cap-title">Account services</div><div class="cap-sub">Account details, loans, deposits</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><path d="M4 8h13M13 4l4 4-4 4"/><path d="M20 16H7M11 12l-4 4 4 4"/></svg></div><div><div class="cap-title">Transfers</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div><div><div class="cap-title">Bill payments</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M14.5 14.3c2.5.3 4.5 2.3 4.8 5.7"/></svg></div><div><div class="cap-title">Payroll</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h8M6 8v8M18 8v8M8 18h8"/></svg></div><div><div class="cap-title">Service requests</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg></div><div><div class="cap-title">Instant products</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M12 11v6M9 14h6"/></svg></div><div><div class="cap-title">Apply for new products</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M7 15h3"/></svg></div><div><div class="cap-title">Credit &amp; debit cards</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><path d="M16 14l2 2 3-3"/></svg></div><div><div class="cap-title">User management</div></div></div>'+
-  '<div class="cap-row"><div class="cap-ico"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z"/><path d="M19 15l.6 1.7L21 17l-1.4.6L19 19l-.6-1.4L17 17l1.4-.3Z"/></svg></div><div><div class="cap-title">Additional platform features</div><div class="cap-sub">All other available FAB Business capabilities</div></div></div>';
-$("#sheetChannelCapList").innerHTML=CHANNEL_CAP_ROWS;
-$("#adminChannelCapList").innerHTML=CHANNEL_CAP_ROWS;
 function renderReqDocs(){
   const wrap=$("#reqDocsList"); wrap.innerHTML="";
   currentRequiredDocs().forEach(d=>{
@@ -1231,13 +1123,14 @@ function openAddDetails(){
   addDraft.nationality="United Kingdom";
   addDraft.mobileExtracted="50 732 7835";
   addDraft.emailExtracted="zaria.hamdy@gmail.com";
-  const isKcp=addDraft.role==="kcp", isAdmin=addDraft.role==="admin";
-  $("#acctAccessCard").style.display=(isKcp||isAdmin)?"none":"block";
-  $("#fldNationality").style.display=isAdmin?"none":"block";
-  $("#addressSection").style.display=isAdmin?"none":"block";
-  $("#fldDesignation").style.display=isAdmin?"block":"none";
-  $("#dtDesignation").value="";
-  if(!isKcp && !isAdmin){ addDraft.accountIds=(co().accounts||[]).map(a=>a.id); updateAccountAccessRow(); }
+  const isKcp=addDraft.role==="kcp", isPartner=addDraft.role==="partner";
+  $("#acctAccessCard").style.display=isKcp?"none":"block";
+  if(!isKcp){ addDraft.accountIds=(co().accounts||[]).map(a=>a.id); updateAccountAccessRow(); }
+  $("#partnerRolesCard").style.display=isPartner?"block":"none";
+  if(isPartner){
+    $("#dtPartnerSig").classList.add("on"); $("#dtPartnerKcp").classList.add("on");
+    addDraft.sig=true; addDraft.primary=true;
+  }
   $("#dtFullName").value=(addDraft.firstName+" "+addDraft.lastName).trim();
   $("#dtNationality").value=addDraft.nationality||"United Kingdom";
   const passportOk=!!addDraft.docFiles.passport;
@@ -1250,15 +1143,13 @@ function openAddDetails(){
   $("#dtCountry").value="United Arab Emirates"; $("#dtCityEmirate").value="Abu Dhabi";
   $("#dtEmail").value=addDraft.emailExtracted||addDraft.email||"";
   $("#dtMobile").value=addDraft.mobileExtracted||addDraft.mobile||"";
-  $("#dtChannelMgmt").classList.remove("on");
-  $("#channelMgmtCard").style.display=isKcp?"none":"block";
-  $("#channelMgmtToggleMode").style.display=isAdmin?"none":"block";
-  $("#channelMgmtAdminMode").style.display=isAdmin?"block":"none";
   setStepbar("s3",2);
   show("addStep3");
 }
+function togglePartnerSig(){ const el=$("#dtPartnerSig"); el.classList.toggle("on"); addDraft.sig=el.classList.contains("on"); }
+function togglePartnerKcp(){ const el=$("#dtPartnerKcp"); el.classList.toggle("on"); addDraft.primary=el.classList.contains("on"); }
 function step3Continue(){
-  if(addDraft.role==="kcp" || addDraft.role==="admin") openAddReview(); else openAddFatca();
+  if(addDraft.role==="kcp") openAddReview(); else openAddFatca();
 }
 
 /* account access — multi-select */
@@ -1313,7 +1204,7 @@ function openAddFatca(){
   addDraft.fatca={};
   addDraft.declarations=[false,false,false];
   renderFatcaQuestions();
-  renderDeclarations();
+  renderAck();
   setStepbar("s4",3);
   show("addStep4");
 }
@@ -1331,17 +1222,24 @@ function renderFatcaQuestions(){
   });
 }
 function setFatca(key,val){ addDraft.fatca[key]=val; renderFatcaQuestions(); updateFatcaSaveBtn(); }
-function renderDeclarations(){
-  const wrap=$("#declList"); wrap.innerHTML="";
+function openTerms(){ renderTermsList(); openSheet("#sheetTerms"); }
+function renderTermsList(){
+  const wrap=$("#tcList"); wrap.innerHTML="";
   DECLARATIONS.forEach((text,i)=>{
     const on=addDraft.declarations[i];
-    const row=document.createElement("div"); row.className="decl-item";
-    row.innerHTML='<div class="decl-check'+(on?" on":"")+'" onclick="toggleDeclaration('+i+')">✓</div><div class="decl-text">'+text+'</div>';
+    const row=document.createElement("div"); row.className="tc-item";
+    row.innerHTML='<div class="tc-check'+(on?" on":"")+'" onclick="toggleDeclaration('+i+')">✓</div><div class="tc-text">'+text+'</div>';
     wrap.appendChild(row);
   });
+  $("#tcAccept").disabled=!(addDraft.declarations[0]&&addDraft.declarations[1]&&addDraft.declarations[2]);
+}
+function toggleDeclaration(i){ addDraft.declarations[i]=!addDraft.declarations[i]; renderTermsList(); }
+function acceptTerms(){ closeSheet(); renderAck(); }
+function renderAck(){
+  const allDeclared=addDraft.declarations[0]&&addDraft.declarations[1]&&addDraft.declarations[2];
+  $("#ackCheck").classList.toggle("on",allDeclared);
   updateFatcaSaveBtn();
 }
-function toggleDeclaration(i){ addDraft.declarations[i]=!addDraft.declarations[i]; renderDeclarations(); }
 function updateFatcaSaveBtn(){
   const allAnswered=FATCA_QUESTIONS.every(q=>addDraft.fatca[q.key]!==undefined);
   const allDeclared=addDraft.declarations[0]&&addDraft.declarations[1]&&addDraft.declarations[2];
@@ -1367,8 +1265,8 @@ function openAddReview(){
   show("addStep6");
 }
 function renderAddReview(){
-  const isKcp=addDraft.role==="kcp", isAdmin=addDraft.role==="admin";
-  const roleLabels={sig:"Authorized Signatory", kcp:"Key Contact Person", poa:"Power of Attorney", admin:"New Admin"};
+  const isKcp=addDraft.role==="kcp";
+  const roleLabels={partner:"Partner / Shareholder / UBO", sig:"Authorized Signatory", kcp:"Key Contact Person", poa:"Power of Attorney"};
   const roleFields=[["Role",roleLabels[addDraft.role]||addDraft.role]];
 
   const attached=currentRequiredDocs().filter(d=>addDraft.docFiles[d.key]);
@@ -1377,26 +1275,29 @@ function renderAddReview(){
   const docFields=[["Required documents",attachedRequired+" of "+requiredCount+" attached"],["Documents",attached.map(d=>d.label).join(", ")||"None attached"]];
 
   const accounts=co().accounts||[];
-  const pdFields=[["Full Name (as in Passport)",$("#dtFullName").value]];
-  if(!isAdmin) pdFields.push(["Nationality",$("#dtNationality").value]);
-  pdFields.push(
+  const pdFields=[
+    ["Full Name (as in Passport)",$("#dtFullName").value],
+    ["Nationality",$("#dtNationality").value],
     ["Passport Number",$("#dtPassportNo").value||"—"],
     ["Passport Expiry Date",$("#dtPassportExpiry").value||"—"],
     ["Emirates ID",$("#dtEidNumber").value],
-    ["Emirates ID Expiry Date",$("#dtEidExpiry").value]
-  );
-  if(isAdmin) pdFields.push(["Designation",$("#dtDesignation").value||"—"]);
-  if(!isAdmin) pdFields.push(["Address",$("#dtCityEmirate").value+", "+$("#dtCountry").value]);
-  if(!isKcp && !isAdmin) pdFields.push(["Account access",addDraft.accountIds.length+" of "+accounts.length+" accounts"]);
+    ["Emirates ID Expiry Date",$("#dtEidExpiry").value],
+    ["Address",$("#dtCityEmirate").value+", "+$("#dtCountry").value]
+  ];
+  if(!isKcp) pdFields.push(["Account access",addDraft.accountIds.length+" of "+accounts.length+" accounts"]);
   pdFields.push(["Email",$("#dtEmail").value], ["Mobile","+971 "+$("#dtMobile").value]);
-  if(!isKcp) pdFields.push(["Channel Management",isAdmin?"Full access (Super Admin)":($("#dtChannelMgmt").classList.contains("on")?"Enabled":"Disabled")]);
 
-  const cards=[
+  const cards=[];
+  if(addDraft.role==="partner"){
+    const additionalRoleFields=[["Authorised Signatory", addDraft.sig?"Yes":"No"],["Key Contact Person", addDraft.primary?"Yes":"No"]];
+    cards.push({title:"Additional Roles", step:"addStep3", fields:additionalRoleFields});
+  }
+  cards.push(
     {title:"Role", step:"addStep1", fields:roleFields},
     {title:"Documents", step:"addStep2", fields:docFields},
     {title:"Personal Details", step:"addStep3", fields:pdFields}
-  ];
-  if(!isKcp && !isAdmin){
+  );
+  if(!isKcp){
     const answered=FATCA_QUESTIONS.filter(q=>addDraft.fatca[q.key]!==undefined).length;
     const fatcaFields=[["Tax questions",answered+" of "+FATCA_QUESTIONS.length+" answered"],["Declarations","3 of 3 confirmed"]];
     const tinFields=[["Type",$("#tinType").value],["Country/jurisdiction",$("#tinCountry").value],["TIN",$("#tinNumber").value||"—"],["Status",$("#tinStatus").value]];
@@ -1412,79 +1313,19 @@ function renderAddReview(){
   });
 }
 function applyAdd(){
-  const isKcp=addDraft.role==="kcp", isAdmin=addDraft.role==="admin";
+  const isKcp=addDraft.role==="kcp";
   const name=$("#dtFullName").value.trim()||addDraft.name;
   const docsAttached=currentRequiredDocs().filter(d=>addDraft.docFiles[d.key]).map(d=>d.label);
-  const taxId=(isKcp||isAdmin)?null:{
+  const taxId=isKcp?null:{
     type:$("#tinType").value, country:$("#tinCountry").value, number:$("#tinNumber").value.trim(),
     status:$("#tinStatus").value, unavailableReason:$("#tinReason").value, unavailableRemarks:$("#tinRemarks").value.trim()
   };
-  const channelMgmt=isKcp?false:isAdmin?true:$("#dtChannelMgmt").classList.contains("on");
-  const accountIds=(isKcp||isAdmin)?[]:(addDraft.accountIds||[]).slice();
-  const fatca=(isKcp||isAdmin)?null:Object.assign({},addDraft.fatca);
-  const designation=isAdmin?$("#dtDesignation").value.trim():"";
+  const accountIds=isKcp?[]:(addDraft.accountIds||[]).slice();
+  const fatca=isKcp?null:Object.assign({},addDraft.fatca);
   addSeq++;
-  co().people.push({ id:"n"+addSeq, name, ownership:0, origOwn:0, sig:addDraft.sig, keyContact:addDraft.primary, poa:addDraft.role==="poa", admin:!!addDraft.admin, channelMgmt, designation, origSig:false, origKC:false, origPOA:false, doc:"new", docUpdated:false, docType:docsAttached.join(" + ")||null, contactUpdated:false, status:"new", docProvided:docsAttached.length>0, accountIds, fatca, taxId });
+  co().people.push({ id:"n"+addSeq, name, ownership:0, origOwn:0, sig:addDraft.sig, keyContact:addDraft.primary, poa:addDraft.role==="poa", origSig:false, origKC:false, origPOA:false, doc:"new", docUpdated:false, docType:docsAttached.join(" + ")||null, contactUpdated:false, status:"new", docProvided:docsAttached.length>0, accountIds, fatca, taxId });
   show("workspace");
   afterEdit("Added to your changes");
-}
-
-/* trade licence update flow (no allocation) */
-function toggleLicence(){
-  if(co().licenceReplacing){ co().licenceReplacing=false; co().pendingLicenceNo=null; co().pendingLicenceExpiry=null; co().pendingLicenceVerified=null; renderWorkspace(); toast("Removed from your changes"); }
-  else openLicence();
-}
-function toggleLicUpload(){
-  const up=$("#licUpload"); up.classList.toggle("done");
-  const done=up.classList.contains("done");
-  up.innerHTML='<span class="idthumb"></span>'+(done?"✓ Trade licence attached":"＋ Upload trade licence");
-  if(done){
-    $("#licDetails").style.display="none"; $("#licOcr").style.display="block";
-    setTimeout(()=>{
-      if(!$("#licUpload").classList.contains("done")) return;
-      const parts=(co().licence||"").split(" · "); const prefix=parts[0], number=parts[1]||parts[0];
-      $("#licNoInput").value=number;
-      $("#licAuthInput").value=[...document.querySelectorAll("#licAuthInput option")].some(o=>o.value===prefix)?prefix:"DED";
-      $("#licExpiryInput").value=bumpYear((co().licenceExpiry||"").replace("Expires ",""));
-      $("#licOcr").style.display="none"; $("#licDetails").style.display="block";
-      updateLicSaveState();
-    }, 1600);
-  } else {
-    $("#licNoInput").value=""; $("#licExpiryInput").value="";
-    $("#licOcr").style.display="none"; $("#licDetails").style.display="none";
-  }
-  updateLicSaveState();
-}
-function updateLicSaveState(){
-  const ready=$("#licDetails").style.display==="block", consent=$("#licConsent").classList.contains("on");
-  $("#licSave").disabled=!(ready&&consent);
-}
-function bumpYear(str){ return (str||"").replace(/(\d{4})/, m=>String(parseInt(m,10)+1)); }
-function openLicence(){
-  $("#licSub").textContent=co().name+" · replace the licence document on file";
-  const up=$("#licUpload"); up.classList.remove("done"); up.innerHTML='<span class="idthumb"></span>＋ Upload trade licence';
-  $("#licOcr").style.display="none"; $("#licDetails").style.display="none";
-  $("#licNoInput").value=""; $("#licAuthInput").value="DED"; $("#licExpiryInput").value="";
-  $("#licConsent").classList.add("on");
-  updateLicSaveState();
-  openSheet("#sheetLicence");
-}
-function continueLicence(){
-  const consent=$("#licConsent").classList.contains("on");
-  if(consent) beginLicenceVerification(); else applyLicence(false);
-}
-let licenceVerifying=false;
-function beginLicenceVerification(){
-  licenceVerifying=true;
-  openSheet("#sheetLicenceVerify");
-  setTimeout(()=>{ licenceVerifying=false; applyLicence(true); }, 1800);
-}
-function applyLicence(verified){
-  co().licenceReplacing=true;
-  co().pendingLicenceNo = $("#licAuthInput").value+" · "+$("#licNoInput").value.trim();
-  co().pendingLicenceExpiry = "Expires "+$("#licExpiryInput").value.trim();
-  co().pendingLicenceVerified = verified;
-  afterEdit(verified?"Licence verified · added to your changes":"Added to your changes");
 }
 
 /* review */
@@ -1503,10 +1344,6 @@ function reqForChange(k){
 }
 function buildChangeSet(){
   const set=[];
-  if(co().licenceReplacing){
-    const verified=co().pendingLicenceVerified;
-    set.push({ title:"Update trade licence", detail:(co().pendingLicenceNo||"")+" · "+(co().pendingLicenceExpiry||"").replace("Expires ","expires "), requests:[{name:"Trade License Update",sla:verified?"instant":"review"}], docNeeded:true, docOk:true, warnings:[verified?"Company details verified directly with the issuing authority.":"Licence document was not verified with the issuing authority — may require manual review."] });
-  }
   if(co().bizContactUpdated) set.push({ title:"Update business contact", detail:"Email, mobile & business address", requests:[{name:"Update Contact Details / Email — Business",sla:"review"}], docNeeded:false, docOk:true, warnings:[] });
   co().people.forEach(p=>{
     const ch=personChanges(p); if(!ch.length) return;
@@ -1620,11 +1457,6 @@ function goReview(){ if(countStagedChanges()===0){ toast("No changes to review y
 /* submit + tracker */
 function commitChanges(){
   const c=co();
-  if(c.licenceReplacing){
-    if(c.pendingLicenceNo) c.licence=c.pendingLicenceNo;
-    if(c.pendingLicenceExpiry) c.licenceExpiry=c.pendingLicenceExpiry;
-    c.licenceReplacing=false; c.pendingLicenceNo=null; c.pendingLicenceExpiry=null; c.pendingLicenceVerified=null;
-  }
   c.bizContactUpdated=false;
   c.people=c.people.filter(p=>!p.removed);
   c.people.forEach(p=>{ p.status="existing"; p.origOwn=p.ownership; p.origSig=p.sig; p.origKC=p.keyContact; p.origPOA=p.poa; p.docUpdated=false; p.docType=null; p.contactUpdated=false; p.doc="verified"; delete p.docProvided; });
@@ -1636,7 +1468,7 @@ function submitAll(){
   $("#bundleStat").className="stat "+(allInstant?"done":"review");
   $("#bundleStat").textContent=allInstant?"Completed":"In progress";
   $("#bundleProgNote").textContent=allInstant?"All changes are reflected on your structure.":"We'll notify you once everything has been reviewed by our KYC team.";
-  $("#doneSummary").textContent=allInstant?"Your structure update is complete.":"Your structure update has been submitted and is now in progress.";
+  $("#doneSummary").textContent=allInstant?"Your structure update is complete.":"Your updated structure has been submitted and is now in review with our KYC team.";
   const ref="ORG-2025-0"+(142+submittedBundles.length);
   $("#bundleRef").textContent="Ref "+ref+" · 16 Jul 2025";
   submittedBundles.unshift({ title:"Structure update", ref, date:"16 Jul 2025", status:allInstant?"Completed":"In Progress" });
