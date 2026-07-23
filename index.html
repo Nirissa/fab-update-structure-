@@ -540,16 +540,31 @@
         <div class="field-label">Emirates ID Expiry Date</div><input class="inp" id="dtEidExpiry" autocomplete="off">
 
         <div id="addressSection">
-          <div class="sec">Address to get in touch</div>
-          <div class="field-label">Office Number</div><input class="inp" id="dtOfficeNo" autocomplete="off">
-          <div class="field-label">Building Name</div><input class="inp" id="dtBuildingName" autocomplete="off">
-          <div class="field-label">Street</div><input class="inp" id="dtStreet" autocomplete="off">
-          <div class="field-label">Nearest Landmark (Optional)</div><input class="inp" id="dtLandmark" autocomplete="off">
+          <div class="sec">Registered Address</div>
+          <div class="field-label">Building Number</div><input class="inp" id="dtRegBuildingNo" autocomplete="off">
+          <div class="field-label">Building Name</div><input class="inp" id="dtRegBuildingName" autocomplete="off">
+          <div class="field-label">P.O. Box</div><input class="inp" id="dtRegPoBox" autocomplete="off">
+          <div class="field-label">Street</div><input class="inp" id="dtRegStreet" autocomplete="off">
+          <div class="field-label">City / Emirate</div>
+          <select class="inp" id="dtRegCity"><option>Abu Dhabi</option><option>Dubai</option><option>Sharjah</option><option>Ajman</option><option>Ras Al Khaimah</option><option>Fujairah</option><option>Umm Al Quwain</option></select>
           <div class="field-label">Country</div>
-          <select class="inp" id="dtCountry"><option>United Arab Emirates</option><option>Other</option></select>
-          <div class="field-label">City/Emirate</div>
-          <select class="inp" id="dtCityEmirate"><option>Abu Dhabi</option><option>Dubai</option><option>Sharjah</option><option>Ajman</option><option>Ras Al Khaimah</option><option>Fujairah</option><option>Umm Al Quwain</option></select>
-          <div class="field-label">P.O Box No.</div><input class="inp" id="dtPoBox" autocomplete="off">
+          <select class="inp" id="dtRegCountry"><option>United Arab Emirates</option><option>Other</option></select>
+
+          <div class="sec">Correspondence Address</div>
+          <div class="decl-item" style="border-top:none;padding-top:0;">
+            <div class="decl-check on" id="dtCorrSame" onclick="this.classList.toggle('on'); toggleAddCorrSame();">✓</div>
+            <div class="decl-text">My correspondence address is the same as my registered address</div>
+          </div>
+          <div id="dtCorrFields" style="display:none;">
+            <div class="field-label">Building Number</div><input class="inp" id="dtCorrBuildingNo" autocomplete="off">
+            <div class="field-label">Building Name</div><input class="inp" id="dtCorrBuildingName" autocomplete="off">
+            <div class="field-label">P.O. Box</div><input class="inp" id="dtCorrPoBox" autocomplete="off">
+            <div class="field-label">Street</div><input class="inp" id="dtCorrStreet" autocomplete="off">
+            <div class="field-label">City / Emirate</div>
+            <select class="inp" id="dtCorrCity"><option>Abu Dhabi</option><option>Dubai</option><option>Sharjah</option><option>Ajman</option><option>Ras Al Khaimah</option><option>Fujairah</option><option>Umm Al Quwain</option></select>
+            <div class="field-label">Country</div>
+            <select class="inp" id="dtCorrCountry"><option>United Arab Emirates</option><option>Other</option></select>
+          </div>
         </div>
 
         <div class="sec">Contact Details</div>
@@ -717,7 +732,31 @@
       <div class="field-label">Email address</div><input class="inp" id="ctEmail" autocomplete="off">
       <div class="field-label">Mobile number</div><input class="inp" id="ctPhone" autocomplete="off">
       <div id="ctAddressWrap" style="display:none;">
-        <div class="field-label">Business address</div><input class="inp" id="ctAddress" autocomplete="off">
+        <div class="sec">Registered Address</div>
+        <div class="field-label">Building Number</div><input class="inp" id="ctRegBuildingNo" autocomplete="off">
+        <div class="field-label">Building Name</div><input class="inp" id="ctRegBuildingName" autocomplete="off">
+        <div class="field-label">P.O. Box</div><input class="inp" id="ctRegPoBox" autocomplete="off">
+        <div class="field-label">Street</div><input class="inp" id="ctRegStreet" autocomplete="off">
+        <div class="field-label">City / Emirate</div>
+        <select class="inp" id="ctRegCity"><option>Abu Dhabi</option><option>Dubai</option><option>Sharjah</option><option>Ajman</option><option>Ras Al Khaimah</option><option>Fujairah</option><option>Umm Al Quwain</option></select>
+        <div class="field-label">Country</div>
+        <select class="inp" id="ctRegCountry"><option>United Arab Emirates</option><option>Other</option></select>
+
+        <div class="sec">Correspondence Address</div>
+        <div class="decl-item" style="border-top:none;padding-top:0;">
+          <div class="decl-check" id="ctCorrSame" onclick="this.classList.toggle('on'); toggleCorrSame();">✓</div>
+          <div class="decl-text">My correspondence address is the same as my registered address</div>
+        </div>
+        <div id="ctCorrFields">
+          <div class="field-label">Building Number</div><input class="inp" id="ctCorrBuildingNo" autocomplete="off">
+          <div class="field-label">Building Name</div><input class="inp" id="ctCorrBuildingName" autocomplete="off">
+          <div class="field-label">P.O. Box</div><input class="inp" id="ctCorrPoBox" autocomplete="off">
+          <div class="field-label">Street</div><input class="inp" id="ctCorrStreet" autocomplete="off">
+          <div class="field-label">City / Emirate</div>
+          <select class="inp" id="ctCorrCity"><option>Abu Dhabi</option><option>Dubai</option><option>Sharjah</option><option>Ajman</option><option>Ras Al Khaimah</option><option>Fujairah</option><option>Umm Al Quwain</option></select>
+          <div class="field-label">Country</div>
+          <select class="inp" id="ctCorrCountry"><option>United Arab Emirates</option><option>Other</option></select>
+        </div>
       </div>
       <button class="sheet-primary" id="ctSave" onclick="applyContact()">Update contact details</button>
       <button class="sheet-ghost" onclick="ctBack()">Back</button>
@@ -741,6 +780,8 @@
 const companies = {
   c1:{ id:"c1", name:"Yalla LLC", licence:"DED · CN-1938472", licenceExpiry:"Expires 14 Mar 2029",
     bizEmail:"finance@yalla.ae", bizPhone:"+971 4 555 0100", bizAddress:"Office 1203, Burj Al Salam, Sheikh Zayed Rd, Dubai", bizContactUpdated:false,
+    regBuildingNo:"1203", regBuildingName:"Burj Al Salam", regPoBox:"112233", regStreet:"Sheikh Zayed Road", regCity:"Dubai", regCountry:"United Arab Emirates",
+    corrSame:true, corrBuildingNo:"1203", corrBuildingName:"Burj Al Salam", corrPoBox:"112233", corrStreet:"Sheikh Zayed Road", corrCity:"Dubai", corrCountry:"United Arab Emirates",
     accounts:[
       { id:"acc1", name:"FAB Business Advantage Account", mask:"•••1234" },
       { id:"acc2", name:"USD Currency Account", mask:"•••5678" },
@@ -754,6 +795,8 @@ const companies = {
     ]},
   c2:{ id:"c2", name:"Al Noor Trading LLC", licence:"DED · CN-2077431", licenceExpiry:"Expires 09 Sep 2029",
     bizEmail:"accounts@alnoor.ae", bizPhone:"+971 4 555 0200", bizAddress:"Warehouse 7, Al Quoz Industrial 3, Dubai", bizContactUpdated:false,
+    regBuildingNo:"7", regBuildingName:"Al Quoz Industrial Complex 3", regPoBox:"45521", regStreet:"Al Quoz Industrial Area 3", regCity:"Dubai", regCountry:"United Arab Emirates",
+    corrSame:true, corrBuildingNo:"7", corrBuildingName:"Al Quoz Industrial Complex 3", corrPoBox:"45521", corrStreet:"Al Quoz Industrial Area 3", corrCity:"Dubai", corrCountry:"United Arab Emirates",
     accounts:[
       { id:"acc1", name:"FAB Business Advantage Account", mask:"•••2201" },
       { id:"acc2", name:"USD Currency Account", mask:"•••2202" },
@@ -766,6 +809,8 @@ const companies = {
     ]},
   c3:{ id:"c3", name:"Marina Bay Logistics FZ-LLC", licence:"IFZA · 12345-01", licenceExpiry:"Expires 21 Jan 2030",
     bizEmail:"ops@marinabay.ae", bizPhone:"+971 4 555 0300", bizAddress:"Unit 22, IFZA Business Park, Dubai Silicon Oasis", bizContactUpdated:false,
+    regBuildingNo:"22", regBuildingName:"IFZA Business Park", regPoBox:"88210", regStreet:"Dubai Silicon Oasis", regCity:"Dubai", regCountry:"United Arab Emirates",
+    corrSame:true, corrBuildingNo:"22", corrBuildingName:"IFZA Business Park", corrPoBox:"88210", corrStreet:"Dubai Silicon Oasis", corrCity:"Dubai", corrCountry:"United Arab Emirates",
     accounts:[
       { id:"acc1", name:"FAB Business Advantage Account", mask:"•••3301" },
       { id:"acc2", name:"USD Currency Account", mask:"•••3302" },
@@ -985,14 +1030,40 @@ function applyIdUpdate(){ const p=co().people.find(x=>x.id===currentMemberId); p
 
 /* contact update */
 function openContactIndividual(id){ currentMemberId=id; contactMode="individual"; const p=co().people.find(x=>x.id===id); $("#ctTitle").textContent="Update contact details"; $("#ctSub").textContent=p.name+" · individual"; $("#ctEmail").value=""; $("#ctPhone").value=""; $("#ctAddressWrap").style.display="none"; $("#ctSave").textContent="Update contact details"; openSheet("#sheetContact"); }
-function openContactBusiness(){ contactMode="business"; $("#ctTitle").textContent="Update business contact"; $("#ctSub").textContent=co().name+" · business"; $("#ctEmail").value=co().bizEmail; $("#ctPhone").value=co().bizPhone; $("#ctAddress").value=co().bizAddress; $("#ctAddressWrap").style.display="block"; $("#ctSave").textContent="Update"; openSheet("#sheetContact"); }
+function openContactBusiness(){
+  contactMode="business"; const c=co();
+  $("#ctTitle").textContent="Update business contact"; $("#ctSub").textContent=c.name+" · business";
+  $("#ctEmail").value=c.bizEmail; $("#ctPhone").value=c.bizPhone;
+  $("#ctRegBuildingNo").value=c.regBuildingNo; $("#ctRegBuildingName").value=c.regBuildingName; $("#ctRegPoBox").value=c.regPoBox; $("#ctRegStreet").value=c.regStreet; $("#ctRegCity").value=c.regCity; $("#ctRegCountry").value=c.regCountry;
+  $("#ctCorrSame").classList.toggle("on",c.corrSame);
+  $("#ctCorrBuildingNo").value=c.corrBuildingNo; $("#ctCorrBuildingName").value=c.corrBuildingName; $("#ctCorrPoBox").value=c.corrPoBox; $("#ctCorrStreet").value=c.corrStreet; $("#ctCorrCity").value=c.corrCity; $("#ctCorrCountry").value=c.corrCountry;
+  $("#ctAddressWrap").style.display="block"; $("#ctSave").textContent="Update";
+  toggleCorrSame(true);
+  openSheet("#sheetContact");
+}
+function toggleCorrSame(skipToggle){
+  const same=$("#ctCorrSame").classList.contains("on");
+  $("#ctCorrFields").style.display=same?"none":"block";
+  if(same && !skipToggle){
+    $("#ctCorrBuildingNo").value=$("#ctRegBuildingNo").value; $("#ctCorrBuildingName").value=$("#ctRegBuildingName").value;
+    $("#ctCorrPoBox").value=$("#ctRegPoBox").value; $("#ctCorrStreet").value=$("#ctRegStreet").value;
+    $("#ctCorrCity").value=$("#ctRegCity").value; $("#ctCorrCountry").value=$("#ctRegCountry").value;
+  }
+}
 function applyContact(){
   if(contactMode==="individual"){ const p=co().people.find(x=>x.id===currentMemberId); p.contactUpdated=true; afterEdit("Added to your changes"); }
   else {
-    co().bizContactUpdated=true;
-    if($("#ctEmail").value.trim()) co().bizEmail=$("#ctEmail").value.trim();
-    if($("#ctPhone").value.trim()) co().bizPhone=$("#ctPhone").value.trim();
-    if($("#ctAddress").value.trim()) co().bizAddress=$("#ctAddress").value.trim();
+    const c=co();
+    c.bizContactUpdated=true;
+    if($("#ctEmail").value.trim()) c.bizEmail=$("#ctEmail").value.trim();
+    if($("#ctPhone").value.trim()) c.bizPhone=$("#ctPhone").value.trim();
+    c.regBuildingNo=$("#ctRegBuildingNo").value.trim(); c.regBuildingName=$("#ctRegBuildingName").value.trim();
+    c.regPoBox=$("#ctRegPoBox").value.trim(); c.regStreet=$("#ctRegStreet").value.trim();
+    c.regCity=$("#ctRegCity").value; c.regCountry=$("#ctRegCountry").value;
+    c.corrSame=$("#ctCorrSame").classList.contains("on");
+    if(c.corrSame){ c.corrBuildingNo=c.regBuildingNo; c.corrBuildingName=c.regBuildingName; c.corrPoBox=c.regPoBox; c.corrStreet=c.regStreet; c.corrCity=c.regCity; c.corrCountry=c.regCountry; }
+    else { c.corrBuildingNo=$("#ctCorrBuildingNo").value.trim(); c.corrBuildingName=$("#ctCorrBuildingName").value.trim(); c.corrPoBox=$("#ctCorrPoBox").value.trim(); c.corrStreet=$("#ctCorrStreet").value.trim(); c.corrCity=$("#ctCorrCity").value; c.corrCountry=$("#ctCorrCountry").value; }
+    c.bizAddress=c.regBuildingNo+", "+c.regBuildingName+", "+c.regStreet+", "+c.regCity;
     afterEdit("Added to your changes");
   }
 }
@@ -1142,12 +1213,25 @@ function openAddDetails(){
   $("#dtPassportExpiry").value=passportOk?addDraft.passportExpiry:"";
   $("#dtEidNumber").value=addDraft.eidNumber||"";
   $("#dtEidExpiry").value=addDraft.eidExpiry||"";
-  $("#dtOfficeNo").value=""; $("#dtBuildingName").value=""; $("#dtStreet").value=""; $("#dtLandmark").value=""; $("#dtPoBox").value="";
-  $("#dtCountry").value="United Arab Emirates"; $("#dtCityEmirate").value="Abu Dhabi";
+  $("#dtRegBuildingNo").value=""; $("#dtRegBuildingName").value=""; $("#dtRegStreet").value=""; $("#dtRegPoBox").value="";
+  $("#dtRegCountry").value="United Arab Emirates"; $("#dtRegCity").value="Abu Dhabi";
+  $("#dtCorrSame").classList.add("on");
+  $("#dtCorrBuildingNo").value=""; $("#dtCorrBuildingName").value=""; $("#dtCorrStreet").value=""; $("#dtCorrPoBox").value="";
+  $("#dtCorrCountry").value="United Arab Emirates"; $("#dtCorrCity").value="Abu Dhabi";
+  $("#dtCorrFields").style.display="none";
   $("#dtEmail").value=addDraft.emailExtracted||addDraft.email||"";
   $("#dtMobile").value=addDraft.mobileExtracted||addDraft.mobile||"";
   setStepbar("s3",2);
   show("addStep3");
+}
+function toggleAddCorrSame(){
+  const same=$("#dtCorrSame").classList.contains("on");
+  $("#dtCorrFields").style.display=same?"none":"block";
+  if(same){
+    $("#dtCorrBuildingNo").value=$("#dtRegBuildingNo").value; $("#dtCorrBuildingName").value=$("#dtRegBuildingName").value;
+    $("#dtCorrPoBox").value=$("#dtRegPoBox").value; $("#dtCorrStreet").value=$("#dtRegStreet").value;
+    $("#dtCorrCity").value=$("#dtRegCity").value; $("#dtCorrCountry").value=$("#dtRegCountry").value;
+  }
 }
 function togglePartnerSig(){ const el=$("#dtPartnerSig"); el.classList.toggle("on"); addDraft.sig=el.classList.contains("on"); }
 function togglePartnerKcp(){ const el=$("#dtPartnerKcp"); el.classList.toggle("on"); addDraft.primary=el.classList.contains("on"); }
@@ -1284,11 +1368,30 @@ function renderAddReview(){
     ["Passport Number",$("#dtPassportNo").value||"—"],
     ["Passport Expiry Date",$("#dtPassportExpiry").value||"—"],
     ["Emirates ID",$("#dtEidNumber").value],
-    ["Emirates ID Expiry Date",$("#dtEidExpiry").value],
-    ["Address",$("#dtCityEmirate").value+", "+$("#dtCountry").value]
+    ["Emirates ID Expiry Date",$("#dtEidExpiry").value]
   ];
   if(!isKcp) pdFields.push(["Account access",addDraft.accountIds.length+" of "+accounts.length+" accounts"]);
   pdFields.push(["Email",$("#dtEmail").value], ["Mobile","+971 "+$("#dtMobile").value]);
+
+  const regAddressFields=[
+    ["Building Number",$("#dtRegBuildingNo").value||"—"],
+    ["Building Name",$("#dtRegBuildingName").value||"—"],
+    ["P.O. Box",$("#dtRegPoBox").value||"—"],
+    ["Street",$("#dtRegStreet").value||"—"],
+    ["City / Emirate",$("#dtRegCity").value],
+    ["Country",$("#dtRegCountry").value]
+  ];
+  const corrSame=$("#dtCorrSame").classList.contains("on");
+  const corrAddressFields=corrSame
+    ? [["Correspondence Address","Same as registered address"]]
+    : [
+        ["Building Number",$("#dtCorrBuildingNo").value||"—"],
+        ["Building Name",$("#dtCorrBuildingName").value||"—"],
+        ["P.O. Box",$("#dtCorrPoBox").value||"—"],
+        ["Street",$("#dtCorrStreet").value||"—"],
+        ["City / Emirate",$("#dtCorrCity").value],
+        ["Country",$("#dtCorrCountry").value]
+      ];
 
   const cards=[];
   if(addDraft.role==="partner"){
@@ -1298,7 +1401,9 @@ function renderAddReview(){
   cards.push(
     {title:"Role", step:"addStep1", fields:roleFields},
     {title:"Documents", step:"addStep2", fields:docFields},
-    {title:"Personal Details", step:"addStep3", fields:pdFields}
+    {title:"Personal Details", step:"addStep3", fields:pdFields},
+    {title:"Registered Address", step:"addStep3", fields:regAddressFields},
+    {title:"Correspondence Address", step:"addStep3", fields:corrAddressFields}
   );
   if(!isKcp){
     const answered=FATCA_QUESTIONS.filter(q=>addDraft.fatca[q.key]!==undefined).length;
