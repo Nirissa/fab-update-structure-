@@ -227,6 +227,9 @@
   .sheet-ghost{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-size:13px;color:var(--ink-2);cursor:pointer;margin-top:8px;}
 
   .change-item{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:13px;margin-bottom:10px;}
+  .ci-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .ci-x{flex:0 0 auto;background:none;border:none;color:var(--ink-3);font-size:15px;cursor:pointer;line-height:1;padding:2px;}
+  .ci-x:active{color:var(--ink);}
   .change-item .ci-title{font-weight:640;font-size:14px;}
   .change-item .ci-detail{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);margin-top:3px;line-height:1.5;}
   .maps{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
@@ -906,7 +909,7 @@ function openMemberSheet(id){
     openSheet("#sheetMember");
     return;
   }
-  wrap.appendChild(actionBtn("％","Change ownership", p.ownership+"% today",()=>openOwn(id)));
+  if(p.ownership>0) wrap.appendChild(actionBtn("％","Change ownership", p.ownership+"% today",()=>openOwn(id)));
   wrap.appendChild(actionBtn("⇪","Update ID document", p.docUpdated?("New "+p.docType+" attached"):"Emirates ID or passport", ()=>openId(id)));
   wrap.appendChild(actionBtn("✉","Update contact details / email", p.contactUpdated?"Update added":"Individual email & mobile", ()=>openContactIndividual(id)));
   if(p.status==="new"){ const d=actionBtn("↺","Discard added person","Removes this un-submitted addition",()=>askConfirm("Discard "+p.name+"?","This removes the person you added. Nothing has been submitted yet.","Discard person",()=>{ co().people=co().people.filter(x=>x.id!==id); afterEdit("Removed from your changes"); })); d.classList.add("danger"); wrap.appendChild(d); }
@@ -1344,7 +1347,7 @@ function reqForChange(k){
 }
 function buildChangeSet(){
   const set=[];
-  if(co().bizContactUpdated) set.push({ title:"Update business contact", detail:"Email, mobile & business address", requests:[{name:"Update Contact Details / Email — Business",sla:"review"}], docNeeded:false, docOk:true, warnings:[] });
+  if(co().bizContactUpdated) set.push({ id:"biz", title:"Update business contact", detail:"Email, mobile & business address", requests:[{name:"Update Contact Details / Email — Business",sla:"review"}], docNeeded:false, docOk:true, warnings:[] });
   co().people.forEach(p=>{
     const ch=personChanges(p); if(!ch.length) return;
     if(p.status==="new"){
@@ -1355,12 +1358,12 @@ function buildChangeSet(){
       if(p.poa) reqs.push({name:"Power of Attorney Addition",sla:"review"});
       reqs.push({name:"ID Documents Update",sla:"review"});
       const roles=[p.ownership>0?(p.ownership+"% owner"):null,p.sig?"signatory":null,p.keyContact?"key contact":null,p.poa?"POA":null].filter(Boolean).join(" · ");
-      set.push({ title:"Add "+p.name, detail:roles, requests:reqs, docNeeded:true, docOk:!!p.docProvided, warnings:[] });
+      set.push({ id:p.id, title:"Add "+p.name, detail:roles, requests:reqs, docNeeded:true, docOk:!!p.docProvided, warnings:[] });
       return;
     }
     if(p.removed){
       const roles=[p.sig?"signatory":null,p.keyContact?"key contact":null,p.poa?"POA":null,p.ownership>0?"shareholder":null].filter(Boolean).join(" · ");
-      set.push({ title:"Remove "+p.name, detail:"Removed as "+(roles||"member"), requests:[{name:"Person Removal",sla:"review"}], docNeeded:false, docOk:true, warnings:["This person will be removed from the company structure entirely."] });
+      set.push({ id:p.id, title:"Remove "+p.name, detail:"Removed as "+(roles||"member"), requests:[{name:"Person Removal",sla:"review"}], docNeeded:false, docOk:true, warnings:["This person will be removed from the company structure entirely."] });
       return;
     }
     const reqs=[], warns=[];
@@ -1369,7 +1372,7 @@ function buildChangeSet(){
       else reqs.push(reqForChange(k));
     });
     const detail=ch.map(k=> k==="own"?("ownership "+p.origOwn+"%→"+p.ownership+"%") : k==="doc"?("new "+(p.docType||"ID")) : roleWord(k)).join(" · ");
-    set.push({ title:"Update "+p.name, detail, requests:reqs, docNeeded:ch.includes("doc"), docOk:true, warnings:warns });
+    set.push({ id:p.id, title:"Update "+p.name, detail, requests:reqs, docNeeded:ch.includes("doc"), docOk:true, warnings:warns });
   });
   return set;
 }
@@ -1383,7 +1386,7 @@ function renderReview(){
     const reqs=c.requests.map(r=>'<div class="req"><span class="dot"></span>'+r.name+'</div>').join("");
     let warns=(c.warnings||[]).map(w=>'<div class="warnrow"><b>!</b><span>'+w+'</span></div>').join("");
     if(blocked) warns+='<div class="warnrow"><b>!</b><span><b>Document required.</b> Attach an ID before this can be submitted.</span></div>';
-    el.innerHTML='<div class="ci-title">'+c.title+'</div><div class="ci-detail">'+c.detail+'</div>'+
+    el.innerHTML='<div class="ci-head"><div class="ci-title">'+c.title+'</div><button class="ci-x" title="Remove this change" onclick="discardChangeCard(\''+c.id+'\')">✕</button></div><div class="ci-detail">'+c.detail+'</div>'+
       '<div class="maps">'+reqs+'</div>'+warns;
     list.appendChild(el);
   });
@@ -1399,6 +1402,19 @@ function renderReview(){
   } else { cta.disabled=false; cta.textContent="Submit"; bn.innerHTML=""; }
   return {set,reqTotal};
 }
+function discardChangeCard(id){
+  if(id==="biz"){ co().bizContactUpdated=false; }
+  else {
+    const p=co().people.find(x=>x.id===id);
+    if(!p) return;
+    if(p.status==="new"){ co().people=co().people.filter(x=>x.id!==id); }
+    else if(p.removed){ p.removed=false; }
+    else { p.ownership=p.origOwn; p.sig=p.origSig; p.keyContact=p.origKC; p.poa=p.origPOA; p.docUpdated=false; p.docType=null; p.contactUpdated=false; }
+  }
+  renderWorkspace();
+  toast("Removed from your changes");
+  if(countStagedChanges()===0) goWorkspace(); else renderReview();
+}
 
 /* catalogue */
 const catData={
@@ -1406,7 +1422,6 @@ const catData={
     {n:"Account Conversion (Upgrade)",sla:"instant"},
     {n:"Cheque Book Issuance",sla:"review"},
     {n:"Dormant Account Activation",sla:"review"},
-    {n:"Company Name Change",sla:"review"},
     {n:"FATCA Update",sla:"review"} ]},
   letters:{ title:"Letters & certificates", sub:"Request official documents", items:[
     {n:"IBAN Letter",sla:"instant"},
