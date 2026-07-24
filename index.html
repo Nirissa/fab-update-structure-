@@ -319,7 +319,7 @@
 
         <div class="sec">Other services</div>
         <div class="svc-card" onclick="openCatalogue('biz')">
-          <div class="sico">⌂</div><div><div class="st2">Business services</div><div class="sd">Account conversion, cheque book, name change, FATCA</div></div><div class="chev">›</div>
+          <div class="sico">⌂</div><div><div class="st2">Business services</div><div class="sd">Account conversion, cheque book, Dormant Account Activation</div></div><div class="chev">›</div>
         </div>
         <div class="svc-card" onclick="openCatalogue('letters')">
           <div class="sico">▤</div><div><div class="st2">Letters &amp; certificates</div><div class="sd">Balance, IBAN, liability, reference and more</div></div><div class="chev">›</div>
@@ -529,15 +529,7 @@
           </button>
         </div>
 
-        <div class="field-label">Full Name</div><input class="inp" id="dtFullName" autocomplete="off">
-        <div id="fldNationality">
-          <div class="field-label">Nationality</div>
-          <select class="inp" id="dtNationality"><option>United Kingdom</option><option>United Arab Emirates</option><option>India</option><option>Pakistan</option><option>Egypt</option><option>Other</option></select>
-        </div>
-        <div class="field-label">Passport Number</div><input class="inp" id="dtPassportNo" autocomplete="off">
-        <div class="field-label">Passport Expiry Date</div><input class="inp" id="dtPassportExpiry" autocomplete="off">
-        <div class="field-label">Emirates ID</div><input class="inp" id="dtEidNumber" autocomplete="off">
-        <div class="field-label">Emirates ID Expiry Date</div><input class="inp" id="dtEidExpiry" autocomplete="off">
+        <div id="identityFields"></div>
 
         <div id="addressSection">
           <div class="sec">Registered Address</div>
@@ -1189,6 +1181,32 @@ function addDocsContinue(){
   const btn=$("#addDocsBtn"); btn.disabled=true; btn.textContent="Processing…";
   setTimeout(()=>{ btn.textContent="Continue"; updateAddDocsBtn(); openAddDetails(); }, 1500);
 }
+function renderIdentityFields(){
+  const isKcp=addDraft.role==="kcp";
+  const wrap=$("#identityFields");
+  const nationalityOptions='<option>United Kingdom</option><option>United Arab Emirates</option><option>India</option><option>Pakistan</option><option>Egypt</option><option>Other</option>';
+  if(isKcp){
+    wrap.innerHTML=
+      '<div class="field-label">Title</div><select class="inp" id="dtTitle"><option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option><option>Other</option></select>'+
+      '<div class="field-label">Full Name (As per passport)</div><input class="inp" id="dtFullName" autocomplete="off">'+
+      '<div class="field-label">Date of Birth</div><input class="inp" id="dtDob" placeholder="DD/MM/YYYY" autocomplete="off">'+
+      '<div id="fldNationality"><div class="field-label">Nationality</div><select class="inp" id="dtNationality">'+nationalityOptions+'</select></div>'+
+      '<div class="field-label">Passport Number</div><input class="inp" id="dtPassportNo" autocomplete="off">'+
+      '<div class="field-label">Passport Expiry Date</div><input class="inp" id="dtPassportExpiry" autocomplete="off">'+
+      '<div class="field-label">Emirates ID</div><input class="inp" id="dtEidNumber" autocomplete="off">'+
+      '<div class="field-label">Emirates ID Expiry Date</div><input class="inp" id="dtEidExpiry" autocomplete="off">'+
+      '<div class="field-label">Marital Status</div><select class="inp" id="dtMaritalStatus"><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option></select>'+
+      '<div class="field-label">Mother\'s Maiden Name</div><input class="inp" id="dtMotherMaidenName" autocomplete="off">';
+  } else {
+    wrap.innerHTML=
+      '<div class="field-label">Full Name</div><input class="inp" id="dtFullName" autocomplete="off">'+
+      '<div id="fldNationality"><div class="field-label">Nationality</div><select class="inp" id="dtNationality">'+nationalityOptions+'</select></div>'+
+      '<div class="field-label">Passport Number</div><input class="inp" id="dtPassportNo" autocomplete="off">'+
+      '<div class="field-label">Passport Expiry Date</div><input class="inp" id="dtPassportExpiry" autocomplete="off">'+
+      '<div class="field-label">Emirates ID</div><input class="inp" id="dtEidNumber" autocomplete="off">'+
+      '<div class="field-label">Emirates ID Expiry Date</div><input class="inp" id="dtEidExpiry" autocomplete="off">';
+  }
+}
 function openAddDetails(){
   addDraft.firstName="Zaria"; addDraft.lastName="Hamdy";
   addDraft.eidNumber="784-"+(1000+addSeq)+"-"+(1000000+addSeq)+"-"+(addSeq%10);
@@ -1198,6 +1216,7 @@ function openAddDetails(){
   addDraft.mobileExtracted="50 732 7835";
   addDraft.emailExtracted="zaria.hamdy@gmail.com";
   const isKcp=addDraft.role==="kcp", isPartner=addDraft.role==="partner";
+  renderIdentityFields();
   $("#acctAccessCard").style.display=isKcp?"none":"block";
   if(!isKcp){ addDraft.accountIds=(co().accounts||[]).map(a=>a.id); updateAccountAccessRow(); }
   $("#partnerRolesCard").style.display=isPartner?"block":"none";
@@ -1213,6 +1232,12 @@ function openAddDetails(){
   $("#dtPassportExpiry").value=passportOk?addDraft.passportExpiry:"";
   $("#dtEidNumber").value=addDraft.eidNumber||"";
   $("#dtEidExpiry").value=addDraft.eidExpiry||"";
+  if(isKcp){
+    $("#dtTitle").value="Ms";
+    $("#dtDob").value="04 May 1990";
+    $("#dtMaritalStatus").value="Single";
+    $("#dtMotherMaidenName").value="Farida Element";
+  }
   $("#dtRegBuildingNo").value=""; $("#dtRegBuildingName").value=""; $("#dtRegStreet").value=""; $("#dtRegPoBox").value="";
   $("#dtRegCountry").value="United Arab Emirates"; $("#dtRegCity").value="Abu Dhabi";
   $("#dtCorrSame").classList.add("on");
@@ -1362,7 +1387,18 @@ function renderAddReview(){
   const docFields=[["Required documents",attachedRequired+" of "+requiredCount+" attached"],["Documents",attached.map(d=>d.label).join(", ")||"None attached"]];
 
   const accounts=co().accounts||[];
-  const pdFields=[
+  const pdFields=isKcp ? [
+    ["Title",$("#dtTitle").value],
+    ["Full Name (As per passport)",$("#dtFullName").value],
+    ["Date of Birth",$("#dtDob").value||"—"],
+    ["Nationality",$("#dtNationality").value],
+    ["Passport Number",$("#dtPassportNo").value||"—"],
+    ["Passport Expiry Date",$("#dtPassportExpiry").value||"—"],
+    ["Emirates ID",$("#dtEidNumber").value],
+    ["Emirates ID Expiry Date",$("#dtEidExpiry").value],
+    ["Marital Status",$("#dtMaritalStatus").value],
+    ["Mother's Maiden Name",$("#dtMotherMaidenName").value||"—"]
+  ] : [
     ["Full Name (as in Passport)",$("#dtFullName").value],
     ["Nationality",$("#dtNationality").value],
     ["Passport Number",$("#dtPassportNo").value||"—"],
@@ -1370,8 +1406,11 @@ function renderAddReview(){
     ["Emirates ID",$("#dtEidNumber").value],
     ["Emirates ID Expiry Date",$("#dtEidExpiry").value]
   ];
-  if(!isKcp) pdFields.push(["Account access",addDraft.accountIds.length+" of "+accounts.length+" accounts"]);
-  pdFields.push(["Email",$("#dtEmail").value], ["Mobile","+971 "+$("#dtMobile").value]);
+
+  const selectedAccounts=accounts.filter(a=>(addDraft.accountIds||[]).includes(a.id));
+  const acctAccessFields=[["Accounts", selectedAccounts.length ? selectedAccounts.map(a=>a.name).join(", ") : "No accounts selected"]];
+
+  const contactFields=[["Email",$("#dtEmail").value], ["Mobile","+971 "+$("#dtMobile").value]];
 
   const regAddressFields=[
     ["Building Number",$("#dtRegBuildingNo").value||"—"],
@@ -1400,15 +1439,27 @@ function renderAddReview(){
   }
   cards.push(
     {title:"Role", step:"addStep1", fields:roleFields},
-    {title:"Documents", step:"addStep2", fields:docFields},
+    {title:"Documents", step:"addStep2", fields:docFields}
+  );
+  if(!isKcp) cards.push({title:"Account Access", step:"addStep3", fields:acctAccessFields});
+  cards.push(
     {title:"Personal Details", step:"addStep3", fields:pdFields},
     {title:"Registered Address", step:"addStep3", fields:regAddressFields},
-    {title:"Correspondence Address", step:"addStep3", fields:corrAddressFields}
+    {title:"Correspondence Address", step:"addStep3", fields:corrAddressFields},
+    {title:"Contact Details", step:"addStep3", fields:contactFields}
   );
   if(!isKcp){
-    const answered=FATCA_QUESTIONS.filter(q=>addDraft.fatca[q.key]!==undefined).length;
-    const fatcaFields=[["Tax questions",answered+" of "+FATCA_QUESTIONS.length+" answered"],["Declarations","3 of 3 confirmed"]];
-    const tinFields=[["Type",$("#tinType").value],["Country/jurisdiction",$("#tinCountry").value],["TIN",$("#tinNumber").value||"—"],["Status",$("#tinStatus").value]];
+    const allDeclared=addDraft.declarations[0]&&addDraft.declarations[1]&&addDraft.declarations[2];
+    const fatcaFields=FATCA_QUESTIONS.map(q=>[q.text, addDraft.fatca[q.key]===true?"Yes":addDraft.fatca[q.key]===false?"No":"—"]);
+    fatcaFields.push(["Terms & Conditions", allDeclared?"Accepted":"Not accepted"]);
+    const tinFields=[
+      ["Type",$("#tinType").value],
+      ["Country/jurisdiction",$("#tinCountry").value],
+      ["TIN",$("#tinNumber").value||"—"],
+      ["Status",$("#tinStatus").value],
+      ["TIN unavailable reason",$("#tinReason").value],
+      ["TIN unavailable remarks",$("#tinRemarks").value||"—"]
+    ];
     cards.push({title:"FATCA & Declarations", step:"addStep4", fields:fatcaFields});
     cards.push({title:"Tax Identifier Details", step:"addStep5", fields:tinFields});
   }
@@ -1526,8 +1577,7 @@ const catData={
   biz:{ title:"Business services", sub:"Account & company services", items:[
     {n:"Account Conversion (Upgrade)",sla:"instant"},
     {n:"Cheque Book Issuance",sla:"review"},
-    {n:"Dormant Account Activation",sla:"review"},
-    {n:"FATCA Update",sla:"review"} ]},
+    {n:"Dormant Account Activation",sla:"review"} ]},
   letters:{ title:"Letters & certificates", sub:"Request official documents", items:[
     {n:"IBAN Letter",sla:"instant"},
     {n:"Authorisation Letter",sla:"review"},
