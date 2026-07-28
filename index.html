@@ -417,7 +417,7 @@
     <!-- ============ REVIEW ============ -->
     <section class="screen" data-screen="review">
       <div class="topbar">
-        <div class="back" title="Back" onclick="goWorkspace()">‹</div>
+        <div class="back" title="Back" onclick="reviewBack()">‹</div>
         <div><h1>Review changes</h1></div>
       </div>
       <div class="scroll" style="padding-bottom:150px;">
@@ -574,12 +574,10 @@
 
     <section class="screen" data-screen="addStep4">
       <div class="topbar">
-        <div class="back" title="Back" onclick="show('addStep3')">‹</div>
+        <div class="back" title="Back" onclick="goWorkspace()">‹</div>
         <div><h1>FATCA &amp; Declarations</h1></div>
       </div>
       <div class="scroll" style="padding-bottom:110px;">
-        <div class="stepbar"><span class="stepfrac" id="s4Frac">4 / 6</span><div class="steptrack"><div class="stepfill" id="s4Fill" style="width:67%;"></div></div></div>
-
         <div class="card">
           <div style="font-weight:650;font-size:14px;margin-bottom:11px;">Tax Information</div>
           <div id="fatcaQList"></div>
@@ -595,7 +593,7 @@
       <div class="stickybar">
         <div class="dual">
           <button class="review-cta ghost" onclick="goWorkspace()">Cancel</button>
-          <button class="review-cta" id="fatcaSaveBtn" disabled onclick="openAddTaxId()">Continue</button>
+          <button class="review-cta" id="fatcaSaveBtn" disabled onclick="proceedToReview()">Continue</button>
         </div>
       </div>
     </section>
@@ -629,7 +627,7 @@
 
     <section class="screen" data-screen="addStep6">
       <div class="topbar">
-        <div class="back" title="Back" onclick="show('addStep5')">‹</div>
+        <div class="back" title="Back" onclick="show('addStep3')">‹</div>
         <div><h1>Review &amp; Confirm</h1></div>
       </div>
       <div class="scroll" style="padding-bottom:110px;">
@@ -974,6 +972,7 @@ function cancelConfirm(){ pendingConfirmFn=null; openMemberSheet(currentMemberId
 
 function removePersonFromStructure(p){
   if(p.sig && sigCount()===1){ showSmError("At least one authorised signatory is required. Add another signatory before removing this person."); return; }
+  if(p.keyContact && kcCount()===1){ showSmError("This is the only key contact person. Add a replacement via Add Individual before removing this person."); return; }
   askConfirm("Remove "+p.name+"?", "This removes "+p.name+" entirely from the structure. Submitted as a removal request.", "Remove person", ()=>{ p.removed=true; afterEdit("Marked for removal"); });
 }
 
@@ -1021,7 +1020,20 @@ function renderId(){
 function applyIdUpdate(){ const p=co().people.find(x=>x.id===currentMemberId); p.docUpdated=true; p.docType=(idDocType==="eid"?"Emirates ID":idDocType==="passport"?"Passport":"Visa"); afterEdit("Added to your changes"); }
 
 /* contact update */
-function openContactIndividual(id){ currentMemberId=id; contactMode="individual"; const p=co().people.find(x=>x.id===id); $("#ctTitle").textContent="Update contact details"; $("#ctSub").textContent=p.name+" · individual"; $("#ctEmail").value=""; $("#ctPhone").value=""; $("#ctAddressWrap").style.display="none"; $("#ctSave").textContent="Update contact details"; openSheet("#sheetContact"); }
+function dummyContactFor(name){
+  const parts=name.trim().split(/\s+/);
+  const email=(parts[0]+"."+parts.slice(1).join("")).toLowerCase().replace(/[^a-z.]/g,"")+"@gmail.com";
+  return { email, mobile:"50 123 4567" };
+}
+function openContactIndividual(id){
+  currentMemberId=id; contactMode="individual";
+  const p=co().people.find(x=>x.id===id);
+  const dummy=dummyContactFor(p.name);
+  $("#ctTitle").textContent="Update contact details"; $("#ctSub").textContent=p.name+" · individual";
+  $("#ctEmail").value=dummy.email; $("#ctPhone").value=dummy.mobile;
+  $("#ctAddressWrap").style.display="none"; $("#ctSave").textContent="Update contact details";
+  openSheet("#sheetContact");
+}
 function openContactBusiness(){
   contactMode="business"; const c=co();
   $("#ctTitle").textContent="Update business contact"; $("#ctSub").textContent=c.name+" · business";
@@ -1063,6 +1075,7 @@ function ctBack(){ if(contactMode==="individual") openMemberSheet(currentMemberI
 
 /* add person — 4-step wizard: role & contact -> ID docs -> OCR confirmation -> full KYC details */
 let addDraft={};
+let bundleFatca={}, bundleDeclarations=[false,false,false];
 function selectAddRole(r){
   if(r==="poa" && poaCount()>=POA_MAX){ toast("Only two power of attorney holders are allowed for this company"); return; }
   addDraft.role=r;
@@ -1104,7 +1117,7 @@ const REQUIRED_DOCS_PARTNER=[
 ];
 const REQUIRED_DOCS_BY_ROLE={ kcp:REQUIRED_DOCS_KCP, poa:REQUIRED_DOCS_POA, partner:REQUIRED_DOCS_PARTNER };
 const currentRequiredDocs = () => REQUIRED_DOCS_BY_ROLE[addDraft.role] || REQUIRED_DOCS_STANDARD;
-const ROLE_STEP_TOTAL = { sig:5, kcp:3, poa:5, partner:5 };
+const ROLE_STEP_TOTAL = { sig:3, kcp:3, poa:3, partner:3 };
 const stepTotal = () => ROLE_STEP_TOTAL[addDraft.role] || 5;
 function setStepbar(id, current){
   const total=stepTotal();
@@ -1261,7 +1274,7 @@ function toggleAddCorrSame(){
 function togglePartnerSig(){ const el=$("#dtPartnerSig"); el.classList.toggle("on"); addDraft.sig=el.classList.contains("on"); }
 function togglePartnerKcp(){ const el=$("#dtPartnerKcp"); el.classList.toggle("on"); addDraft.primary=el.classList.contains("on"); }
 function step3Continue(){
-  if(addDraft.role==="kcp") openAddReview(); else openAddFatca();
+  openAddReview();
 }
 
 /* account access — multi-select */
@@ -1312,18 +1325,17 @@ const DECLARATIONS=[
   "I understand that providing false information, without relevant information or responding in a misleading way, may result in rejection of my application or other appropriate action taken against me. I further certify that if any information provided on this form changes, I will inform you within 30 days of such a change.",
   "I hereby consent the Bank using, processing, reporting and transmitting information about me, my relationship with the Bank (including information about my accounts and other banking products related to the accounts) and my financial affairs to any government authority (e.g., tax authorities), central banks, regulators or third party as may be required, or in connection with any law, regulation or agreement with any governmental authority in the country where the Bank maintains my accounts (which may then pass that information to the tax authorities in another country) or in other countries (such as United States) as may be required by the foregoing."
 ];
-function openAddFatca(){
-  addDraft.fatca={};
-  addDraft.declarations=[false,false,false];
+function openReviewFatca(){
+  bundleFatca={};
+  bundleDeclarations=[false,false,false];
   renderFatcaQuestions();
   renderAck();
-  setStepbar("s4",3);
   show("addStep4");
 }
 function renderFatcaQuestions(){
   const wrap=$("#fatcaQList"); wrap.innerHTML="";
   FATCA_QUESTIONS.forEach(q=>{
-    const val=addDraft.fatca[q.key];
+    const val=bundleFatca[q.key];
     const row=document.createElement("div"); row.className="fatca-q";
     row.innerHTML='<p class="mini" style="margin:0 0 8px;color:var(--ink);">'+q.text+'</p>'+
       '<div class="seg" style="margin-bottom:0;">'+
@@ -1333,30 +1345,31 @@ function renderFatcaQuestions(){
     wrap.appendChild(row);
   });
 }
-function setFatca(key,val){ addDraft.fatca[key]=val; renderFatcaQuestions(); updateFatcaSaveBtn(); }
+function setFatca(key,val){ bundleFatca[key]=val; renderFatcaQuestions(); updateFatcaSaveBtn(); }
 function openTerms(){ renderTermsList(); openSheet("#sheetTerms"); }
 function renderTermsList(){
   const wrap=$("#tcList"); wrap.innerHTML="";
   DECLARATIONS.forEach((text,i)=>{
-    const on=addDraft.declarations[i];
+    const on=bundleDeclarations[i];
     const row=document.createElement("div"); row.className="tc-item";
     row.innerHTML='<div class="tc-check'+(on?" on":"")+'" onclick="toggleDeclaration('+i+')">✓</div><div class="tc-text">'+text+'</div>';
     wrap.appendChild(row);
   });
-  $("#tcAccept").disabled=!(addDraft.declarations[0]&&addDraft.declarations[1]&&addDraft.declarations[2]);
+  $("#tcAccept").disabled=!(bundleDeclarations[0]&&bundleDeclarations[1]&&bundleDeclarations[2]);
 }
-function toggleDeclaration(i){ addDraft.declarations[i]=!addDraft.declarations[i]; renderTermsList(); }
+function toggleDeclaration(i){ bundleDeclarations[i]=!bundleDeclarations[i]; renderTermsList(); }
 function acceptTerms(){ closeSheet(); renderAck(); }
 function renderAck(){
-  const allDeclared=addDraft.declarations[0]&&addDraft.declarations[1]&&addDraft.declarations[2];
+  const allDeclared=bundleDeclarations[0]&&bundleDeclarations[1]&&bundleDeclarations[2];
   $("#ackCheck").classList.toggle("on",allDeclared);
   updateFatcaSaveBtn();
 }
 function updateFatcaSaveBtn(){
-  const allAnswered=FATCA_QUESTIONS.every(q=>addDraft.fatca[q.key]!==undefined);
-  const allDeclared=addDraft.declarations[0]&&addDraft.declarations[1]&&addDraft.declarations[2];
+  const allAnswered=FATCA_QUESTIONS.every(q=>bundleFatca[q.key]!==undefined);
+  const allDeclared=bundleDeclarations[0]&&bundleDeclarations[1]&&bundleDeclarations[2];
   $("#fatcaSaveBtn").disabled=!(allAnswered&&allDeclared);
 }
+function proceedToReview(){ renderReview(); show("review"); }
 
 /* tax identifier details */
 function openAddTaxId(){
@@ -1448,21 +1461,6 @@ function renderAddReview(){
     {title:"Correspondence Address", step:"addStep3", fields:corrAddressFields},
     {title:"Contact Details", step:"addStep3", fields:contactFields}
   );
-  if(!isKcp){
-    const allDeclared=addDraft.declarations[0]&&addDraft.declarations[1]&&addDraft.declarations[2];
-    const fatcaFields=FATCA_QUESTIONS.map(q=>[q.text, addDraft.fatca[q.key]===true?"Yes":addDraft.fatca[q.key]===false?"No":"—"]);
-    fatcaFields.push(["Terms & Conditions", allDeclared?"Accepted":"Not accepted"]);
-    const tinFields=[
-      ["Type",$("#tinType").value],
-      ["Country/jurisdiction",$("#tinCountry").value],
-      ["TIN",$("#tinNumber").value||"—"],
-      ["Status",$("#tinStatus").value],
-      ["TIN unavailable reason",$("#tinReason").value],
-      ["TIN unavailable remarks",$("#tinRemarks").value||"—"]
-    ];
-    cards.push({title:"FATCA & Declarations", step:"addStep4", fields:fatcaFields});
-    cards.push({title:"Tax Identifier Details", step:"addStep5", fields:tinFields});
-  }
   const wrap=$("#reviewSummary"); wrap.innerHTML="";
   cards.forEach(c=>{
     const card=document.createElement("div"); card.className="card review-sum-card"; card.onclick=()=>c.step==="addStep1"?openSheet("#sheetAddRole"):show(c.step);
@@ -1475,12 +1473,9 @@ function applyAdd(){
   const isKcp=addDraft.role==="kcp";
   const name=$("#dtFullName").value.trim()||addDraft.name;
   const docsAttached=currentRequiredDocs().filter(d=>addDraft.docFiles[d.key]).map(d=>d.label);
-  const taxId=isKcp?null:{
-    type:$("#tinType").value, country:$("#tinCountry").value, number:$("#tinNumber").value.trim(),
-    status:$("#tinStatus").value, unavailableReason:$("#tinReason").value, unavailableRemarks:$("#tinRemarks").value.trim()
-  };
+  const taxId=null;
   const accountIds=isKcp?[]:(addDraft.accountIds||[]).slice();
-  const fatca=isKcp?null:Object.assign({},addDraft.fatca);
+  const fatca=null;
   addSeq++;
   co().people.push({ id:"n"+addSeq, name, ownership:0, origOwn:0, sig:addDraft.sig, keyContact:addDraft.primary, poa:addDraft.role==="poa", origSig:false, origKC:false, origPOA:false, doc:"new", docUpdated:false, docType:docsAttached.join(" + ")||null, contactUpdated:false, status:"new", docProvided:docsAttached.length>0, accountIds, fatca, taxId });
   show("workspace");
@@ -1551,6 +1546,8 @@ function renderReview(){
   const blockers=[];
   if(!docsOk) blockers.push("One or more added people still need an ID document.");
   if(sigCount()===0) blockers.push("The business must keep at least one authorised signatory.");
+  if(kcCount()===0) blockers.push("The business must keep exactly one key contact person.");
+  else if(kcCount()>1) blockers.push("Only one key contact person can be submitted. Remove the previous key contact person before submitting.");
   const cta=$("#submitCta"), bn=$("#blockerNote");
   if(blockers.length){
     cta.disabled=true; cta.textContent="Resolve "+blockers.length+" item"+(blockers.length>1?"s":"")+" to submit";
@@ -1622,7 +1619,14 @@ function show(name){ document.querySelectorAll(".screen").forEach(s=>s.classList
 function enterWorkspace(){ renderWorkspace(); show("workspace"); }
 function goLanding(){ renderLandingRequests(); show("landing"); }
 function goWorkspace(){ renderWorkspace(); show("workspace"); }
-function goReview(){ if(countStagedChanges()===0){ toast("No changes to review yet"); return; } renderReview(); show("review"); }
+let reviewCameFromFatca=false;
+function goReview(){
+  if(countStagedChanges()===0){ toast("No changes to review yet"); return; }
+  if(kcCount()>1){ toast("Please remove one key contact person — only one can be active — before continuing."); return; }
+  reviewCameFromFatca=co().people.some(p=>p.status==="new");
+  if(reviewCameFromFatca) openReviewFatca(); else { renderReview(); show("review"); }
+}
+function reviewBack(){ if(reviewCameFromFatca) show("addStep4"); else goWorkspace(); }
 
 /* submit + tracker */
 function commitChanges(){
